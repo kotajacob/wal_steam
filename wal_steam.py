@@ -14,7 +14,6 @@
 Wal Steam
 
 Usage:
-  
   wal_steam.py (-w | -g)
   wal_steam.py (-h | --help)
   wal_steam.py (-v | --version)
@@ -29,5 +28,10 @@ from lib.docopt import docopt
 
 
 if __name__ == '__main__':
-    arguments = docopt(__doc__, version='Wal Steam 0.1.0')
-    print(arguments)
+    arguments = docopt(__doc__, version='Wal Steam 0.1.0') # create the flags from the comment
+
+    if (arguments['--help']==False and arguments['--version']==False):
+        if (arguments['-g']==True):
+            print("OPTION G WOO!")
+        else:
+            print("OPTION W WOO!")
