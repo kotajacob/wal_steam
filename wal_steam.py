@@ -31,45 +31,45 @@ import os
 wpgConfig = os.path.expanduser("~/.wallpapers/current.css")
 walConfig = os.path.expanduser("~/.cache/wal/colors.css")
 
-def parseCss(option):
-    if option == 0:
-        # parse wpg config
-        f_name = open(wpgConfig, 'r')
-        raw_file = f_name.readlines() # save lines into raw_file
-        del raw_file[0:11] # delete elements up to the colors
-        del raw_file[16]   # also that last line is just a } (16 now because we removed some already)
 
-        colors = []
-        for line in raw_file: # loop through raw_file
-            tmp = line[line.find("#"):] # remove everything before the octothorpe
-            tmp = tmp[:7] # remove everything after the color
+def hexToRgb(hexColors):
+    # convert hex colors to rgb colors (takes a list)
+    rgbColors = []
+    for hexC in hexColors: # loop through the hex colors
+        # remove the optothorpe
+        # use tuple and a loop to convert them to rgb
+        # append new colors to our rgb list
+        tmp = hexC.lstrip('#')
+        rgbColors.append(tuple(int(tmp[i:i+2], 16) for i in (0, 2 ,4)))
+    print(rgbColors) # debug
+    return rgbColors
 
-            colors.append(tmp) # add tmp to the new list
+def parseCss(config):
+    # parse colors file and return colors in list
+    f_name = open(config, 'r')
+    raw_file = f_name.readlines() # save lines into raw_file
+    del raw_file[0:11] # delete elements up to the colors
+    del raw_file[16]   # also that last line is just a } (16 now because we removed some already)
 
-        print(colors)
-        f_name.close()
-    else:
-        # parse wal config
-        f_name = open(walConfig, 'r')
-        raw_file = f_name.readlines() # save lines into raw_file
-        del raw_file[0:11] # delete elements up to the colors
-        del raw_file[16]   # also that last line is just a } (16 now because we removed some already)
+    colors = []
+    for line in raw_file: # loop through raw_file
+        tmp = line[line.find("#"):] # remove everything before the octothorpe
+        tmp = tmp[:7] # remove everything after the color
 
-        colors = []
-        for line in raw_file: # loop through raw_file
-            tmp = line[line.find("#"):] # remove everything before the octothorpe
-            tmp = tmp[:7] # remove everything after the color
+        colors.append(tmp) # add tmp to the new list
 
-            colors.append(tmp) # add tmp to the new list
+    f_name.close()
+    return colors
 
-        print(colors)
-        f_name.close()
+def main(arguments):
+    if (arguments['--help']==False and arguments['--version']==False): # determine which option was selected
+        if (arguments['-g']==True):
+            colors = parseCss(wpgConfig) # they picked g so parse wpg
+            colors = hexToRgb(colors)
+        else:
+            colors = parseCss(walConfig) # they picked w so parse wal
+            colors = hexToRgb(colors)
 
 if __name__ == '__main__':
     arguments = docopt(__doc__, version='Wal Steam 0.1.0') # create the flags from the comment
-
-    if (arguments['--help']==False and arguments['--version']==False): # determine which option was selected
-        if (arguments['-g']==True):
-            parseCss(0)
-        else:
-            parseCss(1)
+    main(arguments)
