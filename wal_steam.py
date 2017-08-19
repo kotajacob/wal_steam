@@ -25,29 +25,51 @@ Options:
   -v --version         show version and exit
 """
 from lib.docopt import docopt
+import os
 
-def parseCss():
-    print("Parsing CSS ")
+# set some variables for the file locations
+wpgConfig = os.path.expanduser("~/.wallpapers/current.css")
+walConfig = os.path.expanduser("~/.cache/wal/colors.css")
 
-def getWpg():
-    print("Getting WPG")
-    f_name = open('test.css', 'r')
-    parseCss()
-    f_name.close()
+def parseCss(option):
+    if option == 0:
+        # parse wpg config
+        f_name = open(wpgConfig, 'r')
+        raw_file = f_name.readlines() # save lines into raw_file
+        del raw_file[0:11] # delete elements up to the colors
+        del raw_file[16]   # also that last line is just a } (16 now because we removed some already)
 
-def getWal():
-    print("Getting WAL")
-    f_name = open('test.css', 'r')
-    parseCss()
-    f_name.close()
+        colors = []
+        for line in raw_file: # loop through raw_file
+            tmp = line[line.find("#"):] # remove everything before the octothorpe
+            tmp = tmp[:7] # remove everything after the color
+
+            colors.append(tmp) # add tmp to the new list
+
+        print(colors)
+        f_name.close()
+    else:
+        # parse wal config
+        f_name = open(walConfig, 'r')
+        raw_file = f_name.readlines() # save lines into raw_file
+        del raw_file[0:11] # delete elements up to the colors
+        del raw_file[16]   # also that last line is just a } (16 now because we removed some already)
+
+        colors = []
+        for line in raw_file: # loop through raw_file
+            tmp = line[line.find("#"):] # remove everything before the octothorpe
+            tmp = tmp[:7] # remove everything after the color
+
+            colors.append(tmp) # add tmp to the new list
+
+        print(colors)
+        f_name.close()
 
 if __name__ == '__main__':
     arguments = docopt(__doc__, version='Wal Steam 0.1.0') # create the flags from the comment
 
     if (arguments['--help']==False and arguments['--version']==False): # determine which option was selected
         if (arguments['-g']==True):
-            print("OPTION G WOO!")
-            getWpg()
+            parseCss(0)
         else:
-            print("OPTION W WOO!") 
-            getWal()
+            parseCss(1)
