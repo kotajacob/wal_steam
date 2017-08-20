@@ -34,8 +34,14 @@ OverlaysideButtons_h: Color of buttons described above when you hover the mouse 
 
 TextEntry: Background color of any text box in the steam client (filter games, search friends, chat windoww)
 
-Scrollbar: Scrollbar color (only works if you have 'accent scrollbar' extra installed
 
 Header_Dark: Color of window header
 
 ClientBG: Main background color of the client, it also controlls the background color of any categories in the game list
+
+# Controls.styles
+For right now all we will be editing here is the scrollbar color. In later versions there may be other changes made in this file
+
+# Item descriptions
+ScrollBarSlider: Color of scrollbars is defined in 'bgcolor'
+
