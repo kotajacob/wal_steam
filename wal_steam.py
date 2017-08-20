@@ -80,7 +80,6 @@ def makeStyle(colors):
     f_name.write('\t\tblack24=\"0 0 0 61.2\"\n')
     f_name.write('\t\tblack35=\"0 0 0 106\"\n')
     f_name.write('\t\tblack25=\"0 0 0 63.75\"\n')
-    f_name.write('\t\tblack45=\"0 0 0 114.75\"\n')
     f_name.write('\t\tblack75=\"0 0 0 191.25\"\n')
     f_name.write('\t\tBlack=\"0 0 0 255\"\n')
     f_name.write('\t\tScroll_blu=\"88 168 242 165\"\n')
@@ -102,6 +101,7 @@ def makeStyle(colors):
     f_name.write('\t\tW10close_Red_p=\"241 112 121 255\"\n')
     
     # Now for some variables we are changing
+    f_name.write('\t\tblack45=\"' + tupToPrint(colors[0]) + '\"\n')
     f_name.write('\t\tFocus=\"' + tupToPrint(colors[4]) + '\"\n')
     f_name.write('\t\tFriends_InGame=\"' + tupToPrint(colors[1]) + '\"\n')
     f_name.write('\t\tFriends_Online=\"' + tupToPrint(colors[2]) + '\"\n')
