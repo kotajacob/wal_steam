@@ -24,33 +24,43 @@ Options:
   -h --help            show this help message and exit
   -v --version         show version and exit
 """
-from lib.docopt import docopt # argument parsing
-from shutil import copy       # copying files
-import os                     # getting paths
-import urllib.request         # downloading the zip files
-import zipfile                # extracting the zip files
+from lib.docopt import docopt             # argument parsing
+from shutil import move                   # moveing files
+from shutil import copy                   # copying files
+import os                                 # getting paths
+import urllib.request                     # downloading the zip files
+import zipfile                            # extracting the zip files
+from distutils.dir_util import copy_tree  # copytree from shutil is FUCKING GARBAGE for no reason so we use this instead
 
 # set some variables for the file locations
+metroUrl           = "http://metroforsteam.com/downloads/4.2.4.zip"
+metroPatchUrl      = "http://github.com/redsigma/UPMetroSkin/archive/master.zip"
+
 metroZip           = "resources/metroZip.zip"
 metroPatchZip      = "resources/metroPatchZip.zip"
 metroResource      = "resources/metroZip/"
 metroPatchResource = "resources/metroPatchZip/"
+metroPatchCopy     = "resources/metroPatchZip/UPMetroSkin-master/Unofficial 4.2.4 Patch/Main Files [Install First]/"
+metroCopy          = "resources/metroZip/Metro 4.2.4/"
+metroInstall       = os.path.expanduser("~/.steam/steam/skins/Metro 4.2.4 Wal_Mod/")
+
+newColors          = "resources/colors.styles"
 wpgConfig          = os.path.expanduser("~/.wallpapers/current.css")
 walConfig          = os.path.expanduser("~/.cache/wal/colors.css")
-metroInstall       = os.path.expanduser("~/.steam/steam/skins/Metro 4.2.4 Wal Mod/")
+
 
 def tupToPrint(tup):
     tmp = ' '.join(map(str, tup)) # convert the tupple (rgb color) to a string ready to print
     return tmp
 
 def makeStyle(colors):
-    # create and write the wal_colors.styles file
-    print("Makeing color styles")
+    # create and write the colors.styles file
+    print("Patching new colors")
 
     try:
         os.remove(newColors) # just in case it was already there for some reason
     except FileNotFoundError:
-        print("No file to remove. Moving on.")
+        print("No file to remove")
     f_name = open(newColors, 'w')
 
     # First write the variables we aren't changing
@@ -127,7 +137,13 @@ def makeStyle(colors):
     f_name.write('}\n')
 
     f_name.close()
-    copy(newColors, metro)
+    copy(newColors, metroInstall)
+    # cleanup by removing generated color file
+    os.remove(newColors)
+    print("Wal colors are now patched and ready to go")
+    print("If this is your first run you may have to ")
+    print("enable Metro Wal Mod skin in steam then ")
+    print("simply restart steam!")
 
 def hexToRgb(hexColors):
     # convert hex colors to rgb colors (takes a list)
@@ -148,6 +164,7 @@ def hexToRgb(hexColors):
 
 def parseCss(config):
     # parse colors file and return colors in list
+    print("Reading colors")
     f_name = open(config, 'r')
     raw_file = f_name.readlines() # save lines into raw_file
     del raw_file[0:11] # delete elements up to the colors
@@ -172,15 +189,19 @@ def downloadMetro():
     # download metro for steam
     # download metro for steam patch
     print("Downloading Metro for steam")
-    urllib.request.urlretrieve('http://metroforsteam.com/downloads/4.2.4.zip', metroZip)
+    urllib.request.urlretrieve(metroUrl, metroZip)
     z = zipfile.ZipFile(metroZip, 'r')
     z.extractall(metroResource)
     z.close()
     print("Downloading Metro patch")
-    urllib.request.urlretrieve('http://github.com/redsigma/UPMetroSkin/archive/master.zip', metroPatchZip)
+    urllib.request.urlretrieve(metroPatchUrl, metroPatchZip)
     z = zipfile.ZipFile(metroPatchZip, 'r')
     z.extractall(metroPatchResource)
     z.close()
+    print("Installing Metro Wal")
+    copy_tree(metroPatchCopy, metroCopy) # use copy_tree not copytree shutil copytree is broken
+    move(metroCopy, metroInstall)
+    print("Metro Wal is now installed")
 
 def firstRun():
     # if wal_steam hasn't been run before
@@ -188,7 +209,10 @@ def firstRun():
 
 def checkMetroWal():
     # check if wal_steam has been run before
-    return False
+    if os.path.isdir(metroInstall):
+        return True
+    else:
+        return False
     
 
 def main(arguments):
@@ -197,18 +221,18 @@ def main(arguments):
         # copy metro steam to metro steam wal
         # patch with metro patch and copy our readme
         firstRun()
+    else:
+        print("Metro Wal found")
 
-    # if (arguments['--help'] == False and arguments['--version'] == False): # determine the mode
-    #     if (arguments['-g'] == True):
-    #         colors = parseCss(wpgConfig) # they picked g so parse wpg
-    #         colors = hexToRgb(colors)
-    #         makeStyle(colors)
-    #         replaceSettings()
-    #     else:
-    #         colors = parseCss(walConfig) # they picked w so parse wal
-    #         colors = hexToRgb(colors)
-    #         makeStyle(colors)
-    #         replaceSettings()
+    if (arguments['--help'] == False and arguments['--version'] == False): # determine the mode
+        if (arguments['-g'] == True):
+            colors = parseCss(wpgConfig) # they picked g so parse wpg
+            colors = hexToRgb(colors)
+            makeStyle(colors)
+        else:
+            colors = parseCss(walConfig) # they picked w so parse wal
+            colors = hexToRgb(colors)
+            makeStyle(colors)
 
 if __name__ == '__main__':
     arguments = docopt(__doc__, version='Wal Steam 0.1.0') # create the flags from the comment

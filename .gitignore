@@ -5,4 +5,4 @@
 *.swp
 
 # Left-over generated color file
-resources/colors.styles
+resources/*
