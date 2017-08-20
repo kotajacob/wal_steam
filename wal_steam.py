@@ -25,13 +25,15 @@ Options:
   -v --version         show version and exit
 """
 from lib.docopt import docopt
+from shutil import copy
 import os
 
 # set some variables for the file locations
-wpgConfig     = os.path.expanduser("~/.wallpapers/current.css")
-walConfig     = os.path.expanduser("~/.cache/wal/colors.css")
-metroSettings = os.path.expanduser("~/.steam/steam/skins/Fake\ Skin/settings.styles") # REPLACE AFTER TESTS
-metroColors   = os.path.expanduser("~/.steam/steam/skins/Fake\ Skin/wal_colors.styles") # REPLACE AFTER TESTS
+wpgConfig   = os.path.expanduser("~/.wallpapers/current.css")
+walConfig   = os.path.expanduser("~/.cache/wal/colors.css")
+newSettings = "resources/settings.styles"
+newColors   = "resources/colors.styles"
+metro       = os.path.expanduser("~/.steam/steam/skins/Fake Skin/") # REPLACE AFTER TESTS
 
 def makeStyle(colors):
     # create and write the wal_colors.styles file
@@ -42,6 +44,7 @@ def replaceSettings():
     # replace the settings.styles file with one tweaked to load our colors :)
     # first make a backup of their settings.styles file
     print("Replacing settings")
+    copy(newSettings, metro)
 
 def hexToRgb(hexColors):
     # convert hex colors to rgb colors (takes a list)
