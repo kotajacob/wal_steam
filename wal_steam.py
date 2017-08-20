@@ -32,8 +32,8 @@ import os
 wpgConfig   = os.path.expanduser("~/.wallpapers/current.css")
 walConfig   = os.path.expanduser("~/.cache/wal/colors.css")
 newSettings = "resources/settings.styles"
-newColors   = "resources/wal_colors.styles"
-metro       = os.path.expanduser("~/.steam/steam/skins/Fake Skin/") # REPLACE AFTER TESTS
+newColors   = "resources/colors.styles" # change to wal colors when we fix that include thing
+metro       = os.path.expanduser("~/.steam/steam/skins/Metro 4.2.4/")
 
 def tupToPrint(tup):
     tmp = ' '.join(map(str, tup)) # convert the tupple (rgb color) to a string ready to print
@@ -127,7 +127,6 @@ def makeStyle(colors):
 
 def replaceSettings():
     # replace the settings.styles file with one tweaked to load our colors :)
-    # first make a backup of their settings.styles file
     print("Replacing settings")
     copy(newSettings, metro)
 

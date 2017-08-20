@@ -1,7 +1,7 @@
 "settings.styles"
 {
 	include "custom.styles"
-	include "wal_colors.styles"
+	include "colors.styles"
 
 	colors
 	{
