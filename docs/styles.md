@@ -1,4 +1,4 @@
-#.styles file format
+# .styles file format
 They all use tabs to indent
 
 The first line seems to define what the file relates to. An example of this can be seen in colors.styles, which is included in settings.styles, so it has "settings.styles" on the first line (this is mostly speculation, I will update it once I know for sure)
