@@ -58,10 +58,9 @@ def hexToRgb(hexColors):
         tmpColors.append(tuple(int(tmp[i:i+2], 16) for i in (0, 2 ,4)))
     # put the colors in the correct format
     for color in tmpColors: # loop through the new RGB colors
-        # remove parentheses
-        tmp = color
+        # add alpha
+        tmp = color + (255,)
         rgbColors.append(tmp)
-
     return rgbColors
 
 def parseCss(config):
