@@ -35,6 +35,10 @@ newSettings = "resources/settings.styles"
 newColors   = "resources/wal_colors.styles"
 metro       = os.path.expanduser("~/.steam/steam/skins/Fake Skin/") # REPLACE AFTER TESTS
 
+def tupToPrint(tup):
+    tmp = ' '.join(map(str, tup)) # convert the tupple (rgb color) to a string ready to print
+    return tmp
+
 def makeStyle(colors):
     # create and write the wal_colors.styles file
     print("Makeing color styles")
@@ -46,6 +50,7 @@ def makeStyle(colors):
         print("No file to remove. Moving on.")
     f_name = open(newColors, 'w')
 
+    # First write the variables we aren't changing
     f_name.write('\"settings.styles\"\n')
     f_name.write('{\n')
     f_name.write('\tcolors\n')
@@ -79,6 +84,43 @@ def makeStyle(colors):
     f_name.write('\t\tblack45=\"0 0 0 114.75\"\n')
     f_name.write('\t\tblack75=\"0 0 0 191.25\"\n')
     f_name.write('\t\tBlack=\"0 0 0 255\"\n')
+    f_name.write('\t\tScroll_blu=\"88 168 242 165\"\n')
+    f_name.write('\t\tScroll_blu_s=\"103 193 245 175\"\n')
+    f_name.write('\t\tDetailsBackground=\"Black45\"\n')
+    f_name.write('\t\tDetailPanels=\"black45\"\n')
+    f_name.write('\t\tOverlaySidePanels=\"255 255 255 144.75\"\n')
+    f_name.write('\t\tOverlayHover05=\"255 255 255 12.75\"\n')
+    f_name.write('\t\ttransparent_notification=\"5 5 5 229.5\"\n')
+    f_name.write('\t\tchatframe=\"White50\"\n')
+    f_name.write('\t\tScrollBar=\"86 86 86 255\"\n')
+    f_name.write('\t\tScrollBarH=\"110 110 110 255\"\n')
+    f_name.write('\t\tGrey1=\"40 40 40 255\"\n')
+    f_name.write('\t\tGrey2=\"48 48 48 255\"\n')
+    f_name.write('\t\tGrey3=\"75 75 75 255\"\n')
+    f_name.write('\t\tClientBGTransparent=\"43 43 43 191.25\"\n')
+    f_name.write('\t\tRed=\"255 0 0 255\"\n')
+    f_name.write('\t\tW10close_Red_h=\"232 18 35 255\"\n')
+    f_name.write('\t\tW10close_Red_p=\"241 112 121 255\"\n')
+    
+    # Now for some variables we are changing
+    f_name.write('\t\tFriends_InGame=\"' + tupToPrint(colors[1]) + '\"\n')
+    f_name.write('\t\tFriends_Online=\"' + tupToPrint(colors[1]) + '\"\n')
+    f_name.write('\t\tFrameBorder=\"' + tupToPrint(colors[1]) + '\"\n')
+    f_name.write('\t\tGameList=\"' + tupToPrint(colors[1]) + '\"\n')
+    f_name.write('\t\tDividers=\"' + tupToPrint(colors[1]) + '\"\n')
+    f_name.write('\t\tSeperator=\"' + tupToPrint(colors[1]) + '\"\n')
+    f_name.write('\t\tOverlayBackground=\"' + tupToPrint(colors[1]) + '\"\n')
+    f_name.write('\t\tOverlayPanels=\"' + tupToPrint(colors[1]) + '\"\n')
+    f_name.write('\t\tOverlayClock=\"' + tupToPrint(colors[1]) + '\"\n')
+    f_name.write('\t\tOverlaySideButtons=\"' + tupToPrint(colors[1]) + '\"\n')
+    f_name.write('\t\tOverlaySideButtons_h=\"' + tupToPrint(colors[1]) + '\"\n')
+    f_name.write('\t\tTextEntry=\"' + tupToPrint(colors[1]) + '\"\n')
+    f_name.write('\t\tHeader_Dark=\"' + tupToPrint(colors[1]) + '\"\n')
+    f_name.write('\t\tClientBG=\"' + tupToPrint(colors[1]) + '\"\n')
+
+    # Final formatting stuff
+    f_name.write('\t}\n')
+    f_name.write('}\n')
 
     f_name.close()
     copy(newColors, metro)
