@@ -32,13 +32,56 @@ import os
 wpgConfig   = os.path.expanduser("~/.wallpapers/current.css")
 walConfig   = os.path.expanduser("~/.cache/wal/colors.css")
 newSettings = "resources/settings.styles"
-newColors   = "resources/colors.styles"
+newColors   = "resources/wal_colors.styles"
 metro       = os.path.expanduser("~/.steam/steam/skins/Fake Skin/") # REPLACE AFTER TESTS
 
 def makeStyle(colors):
     # create and write the wal_colors.styles file
     print("Makeing color styles")
     print(colors)
+
+    try:
+        os.remove(newColors) # just in case it was already there for some reason
+    except FileNotFoundError:
+        print("No file to remove. Moving on.")
+    f_name = open(newColors, 'w')
+
+    f_name.write('\"settings.styles\"\n')
+    f_name.write('{\n')
+    f_name.write('\tcolors\n')
+    f_name.write('\t{\n')
+    f_name.write('\t\tnone=\"0 0 0 0\"\n')
+    f_name.write('\t\tFocus_T=\"0 114 198 30.6\"\n')
+    f_name.write('\t\twhite03=\"255 255 255 7.65\"\n')
+    f_name.write('\t\twhite08=\"255 255 255 20.4\"\n')
+    f_name.write('\t\twhite05=\"255 255 255 12.75\"\n')
+    f_name.write('\t\twhite10=\"255 255 255 25.5\"\n')
+    f_name.write('\t\twhite12=\"255 255 255 30.6\"\n')
+    # f.write('\t\twhite15=\"255 255 255 \"\n') this was commented in the file...
+    f_name.write('\t\twhite20=\"255 255 255 51\"\n')
+    f_name.write('\t\twhite24=\"255 255 255 61.2\"\n')
+    f_name.write('\t\twhite25=\"255 255 255 63.75\"\n')
+    f_name.write('\t\twhite35=\"255 255 255 89.25\"\n')
+    f_name.write('\t\twhite45=\"255 255 255 114.75\"\n')
+    f_name.write('\t\twhite50=\"255 255 255 127.5\"\n')
+    f_name.write('\t\twhite75=\"255 255 255 191.25\"\n')
+    f_name.write('\t\twhite=\"255 255 255 255\"\n')
+    f_name.write('\t\tblack03=\"0 0 0 7.65\"\n')
+    f_name.write('\t\tblack08=\"0 0 0 20.4\"\n')
+    f_name.write('\t\tblack05=\"0 0 0 12.75\"\n')
+    f_name.write('\t\tblack10=\"0 0 0 25.5\"\n')
+    f_name.write('\t\tblack12=\"0 0 0 30.6\"\n')
+    # f.write('\t\tblack15=\"0 0 0 38.25\"\n') this was commented in the file too...
+    f_name.write('\t\tblack20=\"0 0 0 51\"\n')
+    f_name.write('\t\tblack24=\"0 0 0 61.2\"\n')
+    f_name.write('\t\tblack35=\"0 0 0 106\"\n')
+    f_name.write('\t\tblack25=\"0 0 0 63.75\"\n')
+    f_name.write('\t\tblack45=\"0 0 0 114.75\"\n')
+    f_name.write('\t\tblack75=\"0 0 0 191.25\"\n')
+    f_name.write('\t\tBlack=\"0 0 0 255\"\n')
+
+    f_name.close()
+    copy(newColors, metro)
 
 def replaceSettings():
     # replace the settings.styles file with one tweaked to load our colors :)
