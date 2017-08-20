@@ -42,7 +42,6 @@ def tupToPrint(tup):
 def makeStyle(colors):
     # create and write the wal_colors.styles file
     print("Makeing color styles")
-    print(colors)
 
     try:
         os.remove(newColors) # just in case it was already there for some reason
@@ -103,20 +102,21 @@ def makeStyle(colors):
     f_name.write('\t\tW10close_Red_p=\"241 112 121 255\"\n')
     
     # Now for some variables we are changing
+    f_name.write('\t\tFocus=\"' + tupToPrint(colors[4]) + '\"\n')
     f_name.write('\t\tFriends_InGame=\"' + tupToPrint(colors[1]) + '\"\n')
-    f_name.write('\t\tFriends_Online=\"' + tupToPrint(colors[1]) + '\"\n')
-    f_name.write('\t\tFrameBorder=\"' + tupToPrint(colors[1]) + '\"\n')
-    f_name.write('\t\tGameList=\"' + tupToPrint(colors[1]) + '\"\n')
-    f_name.write('\t\tDividers=\"' + tupToPrint(colors[1]) + '\"\n')
-    f_name.write('\t\tSeperator=\"' + tupToPrint(colors[1]) + '\"\n')
-    f_name.write('\t\tOverlayBackground=\"' + tupToPrint(colors[1]) + '\"\n')
-    f_name.write('\t\tOverlayPanels=\"' + tupToPrint(colors[1]) + '\"\n')
-    f_name.write('\t\tOverlayClock=\"' + tupToPrint(colors[1]) + '\"\n')
+    f_name.write('\t\tFriends_Online=\"' + tupToPrint(colors[2]) + '\"\n')
+    f_name.write('\t\tFrameBorder=\"' + tupToPrint(colors[0]) + '\"\n')
+    f_name.write('\t\tGameList=\"' + tupToPrint(colors[0]) + '\"\n')
+    f_name.write('\t\tDividers=\"' + tupToPrint(colors[15]) + '\"\n')
+    f_name.write('\t\tSeperator=\"' + tupToPrint(colors[15]) + '\"\n')
+    f_name.write('\t\tOverlayBackground=\"' + tupToPrint(colors[0]) + '\"\n')
+    f_name.write('\t\tOverlayPanels=\"' + tupToPrint(colors[0]) + '\"\n')
+    f_name.write('\t\tOverlayClock=\"' + tupToPrint(colors[0]) + '\"\n')
     f_name.write('\t\tOverlaySideButtons=\"' + tupToPrint(colors[1]) + '\"\n')
-    f_name.write('\t\tOverlaySideButtons_h=\"' + tupToPrint(colors[1]) + '\"\n')
-    f_name.write('\t\tTextEntry=\"' + tupToPrint(colors[1]) + '\"\n')
-    f_name.write('\t\tHeader_Dark=\"' + tupToPrint(colors[1]) + '\"\n')
-    f_name.write('\t\tClientBG=\"' + tupToPrint(colors[1]) + '\"\n')
+    f_name.write('\t\tOverlaySideButtons_h=\"' + tupToPrint(colors[4]) + '\"\n')
+    f_name.write('\t\tTextEntry=\"' + tupToPrint(colors[0]) + '\"\n')
+    f_name.write('\t\tHeader_Dark=\"' + tupToPrint(colors[0]) + '\"\n')
+    f_name.write('\t\tClientBG=\"' + tupToPrint(colors[0]) + '\"\n')
 
     # Final formatting stuff
     f_name.write('\t}\n')
