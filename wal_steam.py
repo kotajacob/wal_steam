@@ -115,22 +115,22 @@ def makeStyle(colors):
     f_name.write('\t\tW10close_Red_p=\"241 112 121 255\"\n')
     
     # Now for some variables we are changing
-    f_name.write('\t\tblack45=\"' + tupToPrint(colors[0]) + '\"\n')
-    f_name.write('\t\tFocus=\"' + tupToPrint(colors[4]) + '\"\n')
-    f_name.write('\t\tFriends_InGame=\"' + tupToPrint(colors[1]) + '\"\n')
-    f_name.write('\t\tFriends_Online=\"' + tupToPrint(colors[2]) + '\"\n')
-    f_name.write('\t\tFrameBorder=\"' + tupToPrint(colors[0]) + '\"\n')
-    f_name.write('\t\tGameList=\"' + tupToPrint(colors[0]) + '\"\n')
-    f_name.write('\t\tDividers=\"' + tupToPrint(colors[15]) + '\"\n')
-    f_name.write('\t\tSeperator=\"' + tupToPrint(colors[15]) + '\"\n')
-    f_name.write('\t\tOverlayBackground=\"' + tupToPrint(colors[0]) + '\"\n')
-    f_name.write('\t\tOverlayPanels=\"' + tupToPrint(colors[0]) + '\"\n')
-    f_name.write('\t\tOverlayClock=\"' + tupToPrint(colors[0]) + '\"\n')
-    f_name.write('\t\tOverlaySideButtons=\"' + tupToPrint(colors[1]) + '\"\n')
-    f_name.write('\t\tOverlaySideButtons_h=\"' + tupToPrint(colors[4]) + '\"\n')
-    f_name.write('\t\tTextEntry=\"' + tupToPrint(colors[0]) + '\"\n')
-    f_name.write('\t\tHeader_Dark=\"' + tupToPrint(colors[0]) + '\"\n')
-    f_name.write('\t\tClientBG=\"' + tupToPrint(colors[0]) + '\"\n')
+    f_name.write('\t\tblack45=\"' + tupToPrint(colors[0]) + ' 255' + '\"\n')
+    f_name.write('\t\tFocus=\"' + tupToPrint(colors[4]) + ' 255' + '\"\n')
+    f_name.write('\t\tFriends_InGame=\"' + tupToPrint(colors[1]) + ' 255' + '\"\n')
+    f_name.write('\t\tFriends_Online=\"' + tupToPrint(colors[2]) + ' 255' + '\"\n')
+    f_name.write('\t\tFrameBorder=\"' + tupToPrint(colors[0]) + ' 255' + '\"\n')
+    f_name.write('\t\tGameList=\"' + tupToPrint(colors[0]) + ' 255' + '\"\n')
+    f_name.write('\t\tDividers=\"' + tupToPrint(colors[15]) + ' 255' + '\"\n')
+    f_name.write('\t\tSeperator=\"' + tupToPrint(colors[15]) + ' 255' + '\"\n')
+    f_name.write('\t\tOverlayBackground=\"' + tupToPrint(colors[0]) + ' 80' + '\"\n')
+    f_name.write('\t\tOverlayPanels=\"' + tupToPrint(colors[0]) + ' 120' + '\"\n')
+    f_name.write('\t\tOverlayClock=\"' + tupToPrint(colors[15]) + ' 120' + '\"\n')
+    f_name.write('\t\tOverlaySideButtons=\"' + tupToPrint(colors[1]) + ' 120' + '\"\n')
+    f_name.write('\t\tOverlaySideButtons_h=\"' + tupToPrint(colors[4]) + ' 120' + '\"\n')
+    f_name.write('\t\tTextEntry=\"' + tupToPrint(colors[0]) + ' 255' + '\"\n')
+    f_name.write('\t\tHeader_Dark=\"' + tupToPrint(colors[0]) + ' 255' + '\"\n')
+    f_name.write('\t\tClientBG=\"' + tupToPrint(colors[0]) + ' 255' + '\"\n')
 
     # Final formatting stuff
     f_name.write('\t}\n')
@@ -155,12 +155,7 @@ def hexToRgb(hexColors):
         # append new colors to our rgb list
         tmp = color.lstrip('#')
         tmpColors.append(tuple(int(tmp[i:i+2], 16) for i in (0, 2 ,4)))
-    # put the colors in the correct format
-    for color in tmpColors: # loop through the new RGB colors
-        # add alpha
-        tmp = color + (255,)
-        rgbColors.append(tmp)
-    return rgbColors
+    return tmpColors
 
 def parseCss(config):
     # parse colors file and return colors in list
