@@ -11,18 +11,31 @@ In the unnoficial patch for metro for steam, there are some 'extras' that are in
 
 # Item descriptions
 Friends_InGame: The text color of a friends name while they are in a game
+
 Friends_Online: The text color of a friends name while they are online
+
 FrameBorder: The color of the borders at the edge of each window, also serperates the header from the rest of a window
+
 GameList: background color of the game list on the left side of the library
+
 Dividers: color of dividers in dropdown menus
+
 Seperators: color of column seperators in places like the dlc information panel in the details of a game
 
 OverlayBackground: color of the background of the in game overlay
+
 Overlay Panels: Overlay item backgrounds (friends, guides, etc...)
+
 OverlayClock: color of clock in the overlay
+
 OverlaySideButtons: Color of buttons on the right side of the overlay (web browser, music, settings)
+
 OverlaysideButtons_h: Color of buttons described above when you hover the mouse over them
+
 TextEntry: Background color of any text box in the steam client (filter games, search friends, chat windoww)
+
 Scrollbar: Scrollbar color (only works if you have 'accent scrollbar' extra installed
+
 Header_Dark: Color of window header
+
 ClientBG: Main background color of the client, it also controlls the background color of any categories in the game list
