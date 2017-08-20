@@ -24,16 +24,20 @@ Options:
   -h --help            show this help message and exit
   -v --version         show version and exit
 """
-from lib.docopt import docopt
-from shutil import copy
-import os
+from lib.docopt import docopt # argument parsing
+from shutil import copy       # copying files
+import os                     # getting paths
+import urllib.request         # downloading the zip files
+import zipfile                # extracting the zip files
 
 # set some variables for the file locations
-wpgConfig   = os.path.expanduser("~/.wallpapers/current.css")
-walConfig   = os.path.expanduser("~/.cache/wal/colors.css")
-newSettings = "resources/settings.styles"
-newColors   = "resources/colors.styles" # change to wal colors when we fix that include thing
-metro       = os.path.expanduser("~/.steam/steam/skins/Metro 4.2.4/")
+metroZip           = "resources/metroZip.zip"
+metroPatchZip      = "resources/metroPatchZip.zip"
+metroResource      = "resources/metroZip/"
+metroPatchResource = "resources/metroPatchZip/"
+wpgConfig          = os.path.expanduser("~/.wallpapers/current.css")
+walConfig          = os.path.expanduser("~/.cache/wal/colors.css")
+metroInstall       = os.path.expanduser("~/.steam/steam/skins/Metro 4.2.4 Wal Mod/")
 
 def tupToPrint(tup):
     tmp = ' '.join(map(str, tup)) # convert the tupple (rgb color) to a string ready to print
@@ -125,11 +129,6 @@ def makeStyle(colors):
     f_name.close()
     copy(newColors, metro)
 
-def replaceSettings():
-    # replace the settings.styles file with one tweaked to load our colors :)
-    print("Replacing settings")
-    copy(newSettings, metro)
-
 def hexToRgb(hexColors):
     # convert hex colors to rgb colors (takes a list)
     tmpColors = []
@@ -164,18 +163,52 @@ def parseCss(config):
     f_name.close()
     return colors
 
+##################
+# For installing #
+#   Wal Steam    #
+##################
+
+def downloadMetro():
+    # download metro for steam
+    # download metro for steam patch
+    print("Downloading Metro for steam")
+    urllib.request.urlretrieve('http://metroforsteam.com/downloads/4.2.4.zip', metroZip)
+    z = zipfile.ZipFile(metroZip, 'r')
+    z.extractall(metroResource)
+    z.close()
+    print("Downloading Metro patch")
+    urllib.request.urlretrieve('http://github.com/redsigma/UPMetroSkin/archive/master.zip', metroPatchZip)
+    z = zipfile.ZipFile(metroPatchZip, 'r')
+    z.extractall(metroPatchResource)
+    z.close()
+
+def firstRun():
+    # if wal_steam hasn't been run before
+    downloadMetro()
+
+def checkMetroWal():
+    # check if wal_steam has been run before
+    return False
+    
+
 def main(arguments):
-    if (arguments['--help'] == False and arguments['--version'] == False): # determine the mode
-        if (arguments['-g'] == True):
-            colors = parseCss(wpgConfig) # they picked g so parse wpg
-            colors = hexToRgb(colors)
-            makeStyle(colors)
-            replaceSettings()
-        else:
-            colors = parseCss(walConfig) # they picked w so parse wal
-            colors = hexToRgb(colors)
-            makeStyle(colors)
-            replaceSettings()
+    ready = checkMetroWal()
+    if not ready:
+        # copy metro steam to metro steam wal
+        # patch with metro patch and copy our readme
+        firstRun()
+
+    # if (arguments['--help'] == False and arguments['--version'] == False): # determine the mode
+    #     if (arguments['-g'] == True):
+    #         colors = parseCss(wpgConfig) # they picked g so parse wpg
+    #         colors = hexToRgb(colors)
+    #         makeStyle(colors)
+    #         replaceSettings()
+    #     else:
+    #         colors = parseCss(walConfig) # they picked w so parse wal
+    #         colors = hexToRgb(colors)
+    #         makeStyle(colors)
+    #         replaceSettings()
 
 if __name__ == '__main__':
     arguments = docopt(__doc__, version='Wal Steam 0.1.0') # create the flags from the comment
