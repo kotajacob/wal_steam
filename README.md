@@ -23,7 +23,7 @@ Then install steam using your distros package manager. (On ubuntu you need to en
 
 Next simply clone the repo to a memorable location like documents.
 
-git clone https://github.com/kotajacob/wal_steam.git ~/Documents
+`git clone https://github.com/kotajacob/wal_steam.git ~/Documents`
 
 That's it, the first time you run wal steam it will download all the needed skins and patches and apply them.
 
@@ -33,7 +33,7 @@ First cd into the wal_steam directory. Then you can just run the script with pyt
 
 Example:
 
-python wal_steam.py -g
+`python wal_steam.py -g`
 
 Usage:
   wal_steam.py (-w | -g)
