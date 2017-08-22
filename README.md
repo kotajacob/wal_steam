@@ -47,3 +47,15 @@ Options:
   -h --help            show this help message and exit
   -v --version         show version and exit
 ```
+
+## Screenshots
+
+![1](https://ptpb.pw/kw6D.png)
+
+![2](https://ptpb.pw/zhFg.png)
+
+![3](https://ptpb.pw/l9Rw.png)
+
+![4](https://ptpb.pw/xOo1.png)
+
+![5](https://ptpb.pw/n8jd.png)
