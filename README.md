@@ -35,7 +35,7 @@ Example:
 
 `python wal_steam.py -g`
 
-`
+```
 Usage:
   wal_steam.py (-w | -g)
   wal_steam.py (-h | --help)
@@ -46,4 +46,4 @@ Options:
   -g                   use wpg for colors
   -h --help            show this help message and exit
   -v --version         show version and exit
-`
+```
