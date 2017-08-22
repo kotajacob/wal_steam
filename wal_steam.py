@@ -115,7 +115,7 @@ def makeStyle(colors):
     f_name.write('\t\tW10close_Red_p=\"241 112 121 255\"\n')
     
     # Now for some variables we are changing
-    f_name.write('\t\tblack45=\"' + tupToPrint(colors[0]) + ' 255' + '\"\n')
+    f_name.write('\t\tblack45=\"' + tupToPrint(colors[0]) + ' 120' + '\"\n')
     f_name.write('\t\tFocus=\"' + tupToPrint(colors[4]) + ' 255' + '\"\n')
     f_name.write('\t\tFriends_InGame=\"' + tupToPrint(colors[1]) + ' 255' + '\"\n')
     f_name.write('\t\tFriends_Online=\"' + tupToPrint(colors[2]) + ' 255' + '\"\n')
