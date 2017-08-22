@@ -31,11 +31,13 @@ Now go in that directory and run wal_steam once so it can get the colors and the
 
 That's it, the first time you run wal steam it will download all the needed skins and patches. Then you just need to open steam, select the metro for steam wal_mod skin and restart steam to apply the theme.
 
-**Update:** We now have an aur package [python-wal-steam-git.](https://aur.archlinux.org/packages/python-wal-steam-git) Thanks to [/u/_tague on reddit.](https://www.reddit.com/user/_tague)
+**Update:** (THE AUR PACKAGE IS OUT OF DATE AND BROKEN - WILL LIKELY BE FIXED SOON) We have an aur package [python-wal-steam-git.](https://aur.archlinux.org/packages/python-wal-steam-git) Thanks to [/u/_tague on reddit.](https://www.reddit.com/user/_tague)
 
 ## Using
 
 **Make sure you've run wal or wpgk at least once to generate the colors and set the wallpaper.**
+
+**Note:** On some distros, notably **Ubuntu** you'll have to run the command python3 instead of python or you'll have an error about failing to import urllib.request.
 
 Just run the script with python. Use -g for wpg or -w for wal.
 
