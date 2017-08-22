@@ -33,18 +33,20 @@ import zipfile                            # extracting the zip files
 from distutils.dir_util import copy_tree  # copytree from shutil is FUCKING GARBAGE for no reason so we use this instead
 
 # set some variables for the file locations
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+
 metroUrl           = "http://metroforsteam.com/downloads/4.2.4.zip"
 metroPatchUrl      = "http://github.com/redsigma/UPMetroSkin/archive/master.zip"
 
-metroZip           = "resources/metroZip.zip"
-metroPatchZip      = "resources/metroPatchZip.zip"
-metroResource      = "resources/metroZip/"
-metroPatchResource = "resources/metroPatchZip/"
-metroPatchCopy     = "resources/metroPatchZip/UPMetroSkin-master/Unofficial 4.2.4 Patch/Main Files [Install First]/"
-metroCopy          = "resources/metroZip/Metro 4.2.4/"
+metroZip           = os.path.join(ROOT_DIR, "resources/metroZip.zip")
+metroPatchZip      = os.path.join(ROOT_DIR, "resources/metroPatchZip.zip")
+metroResource      = os.path.join(ROOT_DIR, "resources/metroZip/")
+metroPatchResource = os.path.join(ROOT_DIR, "resources/metroPatchZip/")
+metroPatchCopy     = os.path.join(ROOT_DIR, "resources/metroPatchZip/UPMetroSkin-master/Unofficial 4.2.4 Patch/Main Files [Install First]/")
+metroCopy          = os.path.join(ROOT_DIR, "resources/metroZip/Metro 4.2.4/")
 metroInstall       = os.path.expanduser("~/.local/share/Steam/skins/Metro 4.2.4 Wal_Mod/")
 
-newColors          = "resources/colors.styles"
+newColors          = os.path.join(ROOT_DIR, "resources/colors.styles")
 wpgConfig          = os.path.expanduser("~/.wallpapers/current.css")
 walConfig          = os.path.expanduser("~/.cache/wal/colors.css")
 
