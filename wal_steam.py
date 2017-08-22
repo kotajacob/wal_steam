@@ -206,7 +206,7 @@ def firstRun():
 
 def checkMetroWal():
     # check if wal_steam has been run before
-    if os.path.isdir(metroInstall):
+    if os.path.isdir(metroResource): # TEMP FIX FOR AUR RELEASE (install will be overhauled in 1.1.0)
         return True
     else:
         return False
@@ -232,5 +232,5 @@ def main(arguments):
             makeStyle(colors)
 
 if __name__ == '__main__':
-    arguments = docopt(__doc__, version='Wal Steam 1.0.0') # create the flags from the comment
+    arguments = docopt(__doc__, version='Wal Steam 1.0.2') # create the flags from the comment
     main(arguments)
