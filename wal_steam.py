@@ -33,20 +33,20 @@ import zipfile                            # extracting the zip files
 from distutils.dir_util import copy_tree  # copytree from shutil is FUCKING GARBAGE for no reason so we use this instead
 
 # set some variables for the file locations
-ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = os.path.expanduser("~/.cache/wal_steam/")
 
 metroUrl           = "http://metroforsteam.com/downloads/4.2.4.zip"
 metroPatchUrl      = "http://github.com/redsigma/UPMetroSkin/archive/master.zip"
 
-metroZip           = os.path.join(ROOT_DIR, "resources/metroZip.zip")
-metroPatchZip      = os.path.join(ROOT_DIR, "resources/metroPatchZip.zip")
-metroResource      = os.path.join(ROOT_DIR, "resources/metroZip/")
-metroPatchResource = os.path.join(ROOT_DIR, "resources/metroPatchZip/")
-metroPatchCopy     = os.path.join(ROOT_DIR, "resources/metroPatchZip/UPMetroSkin-master/Unofficial 4.2.4 Patch/Main Files [Install First]/")
-metroCopy          = os.path.join(ROOT_DIR, "resources/metroZip/Metro 4.2.4/")
-metroInstall       = os.path.expanduser("~/.local/share/Steam/skins/Metro 4.2.4 Wal_Mod/")
+metroZip           = os.path.join(ROOT_DIR, "metroZip.zip")
+metroPatchZip      = os.path.join(ROOT_DIR, "metroPatchZip.zip")
+metroResource      = os.path.join(ROOT_DIR, "metroZip/")
+metroPatchResource = os.path.join(ROOT_DIR, "metroPatchZip/")
+metroPatchCopy     = os.path.join(ROOT_DIR, "metroPatchZip/UPMetroSkin-master/Unofficial 4.2.4 Patch/Main Files [Install First]/")
+metroCopy          = os.path.join(ROOT_DIR, "metroZip/Metro 4.2.4/")
+metroInstall       = os.path.expanduser("~/.steam/steam/skins/Metro 4.2.4 Wal_Mod/")
 
-newColors          = os.path.join(ROOT_DIR, "resources/colors.styles")
+newColors          = os.path.join(ROOT_DIR, "colors.styles")
 wpgConfig          = os.path.expanduser("~/.wallpapers/current.css")
 walConfig          = os.path.expanduser("~/.cache/wal/colors.css")
 
@@ -54,6 +54,13 @@ walConfig          = os.path.expanduser("~/.cache/wal/colors.css")
 def tupToPrint(tup):
     tmp = ' '.join(map(str, tup)) # convert the tupple (rgb color) to a string ready to print
     return tmp
+
+def checkDir(dirName):
+    # check if wal_steam has been run before
+    if os.path.isdir(dirName):
+        return True
+    else:
+        return False
 
 def makeStyle(colors):
     # create and write the colors.styles file
@@ -115,7 +122,7 @@ def makeStyle(colors):
     f_name.write('\t\tRed=\"255 0 0 255\"\n')
     f_name.write('\t\tW10close_Red_h=\"232 18 35 255\"\n')
     f_name.write('\t\tW10close_Red_p=\"241 112 121 255\"\n')
-    
+
     # Now for some variables we are changing
     f_name.write('\t\tblack45=\"' + tupToPrint(colors[0]) + ' 120' + '\"\n')
     f_name.write('\t\tFocus=\"' + tupToPrint(colors[4]) + ' 255' + '\"\n')
@@ -182,6 +189,9 @@ def parseCss(config):
 #   Wal Steam    #
 ##################
 
+def makeCache():
+    os.mkdir(ROOT_DIR)
+
 def downloadMetro():
     # download metro for steam
     # download metro for steam patch
@@ -195,31 +205,28 @@ def downloadMetro():
     z = zipfile.ZipFile(metroPatchZip, 'r')
     z.extractall(metroPatchResource)
     z.close()
+
+def installMetro():
     print("Installing Metro Wal")
-    copy_tree(metroPatchCopy, metroCopy) # use copy_tree not copytree shutil copytree is broken
-    move(metroCopy, metroInstall)
+    copy_tree(metroPatchCopy, metroCopy) # use copy_tree not copytree, shutil copytree is broken
+    copy_tree(metroCopy, metroInstall)
     print("Metro Wal is now installed")
 
-def firstRun():
-    # if wal_steam hasn't been run before
-    downloadMetro()
-
-def checkMetroWal():
-    # check if wal_steam has been run before
-    if os.path.isdir(metroResource): # TEMP FIX FOR AUR RELEASE (install will be overhauled in 1.1.0)
-        return True
-    else:
-        return False
-    
-
 def main(arguments):
-    ready = checkMetroWal()
-    if not ready:
-        # copy metro steam to metro steam wal
-        # patch with metro patch and copy our readme
-        firstRun()
-    else:
-        print("Metro Wal found")
+    if not checkDir(ROOT_DIR):
+        # cache folder is missing
+        # do setup
+        makeCache()
+        downloadMetro()
+        installMetro()
+    else: # user has the cache
+        if not checkDir(metroInstall):
+            # cache is there, but no metro theme!
+            downloadMetro()
+            installMetro()
+        else:
+            # everything is fine move on!
+            print("Metro Wal found")
 
     if (arguments['--help'] == False and arguments['--version'] == False): # determine the mode
         if (arguments['-g'] == True):
@@ -232,5 +239,5 @@ def main(arguments):
             makeStyle(colors)
 
 if __name__ == '__main__':
-    arguments = docopt(__doc__, version='Wal Steam 1.0.2') # create the flags from the comment
+    arguments = docopt(__doc__, version='Wal Steam 1.1.0') # create the flags from the comment
     main(arguments)
