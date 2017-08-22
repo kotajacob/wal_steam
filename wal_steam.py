@@ -44,11 +44,26 @@ metroResource      = os.path.join(ROOT_DIR, "metroZip/")
 metroPatchResource = os.path.join(ROOT_DIR, "metroPatchZip/")
 metroPatchCopy     = os.path.join(ROOT_DIR, "metroPatchZip/UPMetroSkin-master/Unofficial 4.2.4 Patch/Main Files [Install First]/")
 metroCopy          = os.path.join(ROOT_DIR, "metroZip/Metro 4.2.4/")
-metroInstall       = os.path.expanduser("~/.steam/steam/skins/Metro 4.2.4 Wal_Mod/")
+
+metroInstallOther  = os.path.expanduser("~/.steam/steam/skins/Metro 4.2.4 Wal_Mod/")
+metroInstallUbuntu = os.path.expanduser("~/.steam/skins/Metro 4.2.4 Wal_Mod/")
+steamSkins         = os.path.expanduser("~/.steam/steam/skins/")
+steamSkinsUbuntu   = os.path.expanduser("~/.steam/skins/")
 
 newColors          = os.path.join(ROOT_DIR, "colors.styles")
 wpgConfig          = os.path.expanduser("~/.wallpapers/current.css")
 walConfig          = os.path.expanduser("~/.cache/wal/colors.css")
+
+# Set metro install
+if os.path.isdir(steamSkins):
+    # use "other" path
+    metroInstall = metroInstallOther
+elif os.path.isdir(steamSkinsUbuntu):
+    # use "ubuntu" path
+    metroInstall = metroInstallUbuntu
+else:
+    # no steam found
+    sys.exit("Error: Steam not found!")
 
 
 def tupToPrint(tup):
@@ -212,21 +227,26 @@ def installMetro():
     copy_tree(metroCopy, metroInstall)
     print("Metro Wal is now installed")
 
-def main(arguments):
+def checkInstall():
     if not checkDir(ROOT_DIR):
-        # cache folder is missing
-        # do setup
+        # wal_steam cache missing
+        # redownload and patch
         makeCache()
         downloadMetro()
         installMetro()
-    else: # user has the cache
+    else:
+        # cache was found
+        # check for skin
         if not checkDir(metroInstall):
-            # cache is there, but no metro theme!
+            # metro install missing
             downloadMetro()
             installMetro()
         else:
-            # everything is fine move on!
-            print("Metro Wal found")
+            # metro install found
+            print("Metro install found")
+
+def main(arguments):
+    checkInstall()
 
     if (arguments['--help'] == False and arguments['--version'] == False): # determine the mode
         if (arguments['-g'] == True):
