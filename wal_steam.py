@@ -42,7 +42,7 @@ metroResource      = "resources/metroZip/"
 metroPatchResource = "resources/metroPatchZip/"
 metroPatchCopy     = "resources/metroPatchZip/UPMetroSkin-master/Unofficial 4.2.4 Patch/Main Files [Install First]/"
 metroCopy          = "resources/metroZip/Metro 4.2.4/"
-metroInstall       = os.path.expanduser("~/.steam/steam/skins/Metro 4.2.4 Wal_Mod/")
+metroInstall       = os.path.expanduser("~/.local/share/Steam/skins/Metro 4.2.4 Wal_Mod/")
 
 newColors          = "resources/colors.styles"
 wpgConfig          = os.path.expanduser("~/.wallpapers/current.css")
