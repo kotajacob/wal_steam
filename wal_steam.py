@@ -205,23 +205,28 @@ def downloadMetro():
     z = zipfile.ZipFile(metroPatchZip, 'r')
     z.extractall(metroPatchResource)
     z.close()
+
+def installMetro():
     print("Installing Metro Wal")
     copy_tree(metroPatchCopy, metroCopy) # use copy_tree not copytree, shutil copytree is broken
     copy_tree(metroCopy, metroInstall)
     print("Metro Wal is now installed")
 
-def firstRun():
-    # if wal_steam hasn't been run before
-    makeCache()
-    downloadMetro()
-
 def main(arguments):
     if not checkDir(ROOT_DIR):
         # cache folder is missing
         # do setup
-        firstRun()
-    else:
-        print("Metro Wal found")
+        makeCache()
+        downloadMetro()
+        installMetro()
+    else: # user has the cache
+        if not checkDir(metroInstall):
+            # cache is there, but no metro theme!
+            downloadMetro()
+            installMetro()
+        else:
+            # everything is fine move on!
+            print("Metro Wal found")
 
     if (arguments['--help'] == False and arguments['--version'] == False): # determine the mode
         if (arguments['-g'] == True):
