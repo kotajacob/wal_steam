@@ -31,7 +31,9 @@ That's it, the first time you run wal steam it will download all the needed skin
 
 ## Using
 
-First cd into the wal_steam directory. Then you can just run the script with python. Use -g for wpg or -w for wal.
+First make sure you've run wal or wpgk at least once to generate the colors and set the wallpaper.
+
+Then cd into the wal_steam directory and just run the script with python. Use -g for wpg or -w for wal.
 
 Example:
 
