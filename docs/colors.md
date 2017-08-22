@@ -10,6 +10,8 @@ This is the section that the first couple versions of wal_steam will be focusing
 In the unnoficial patch for metro for steam, there are some 'extras' that are included. Some of these extras must be installed for some items to be colored. For instance, to have the scrollbars be a different color, you will need to install the 'accent scrollbars' extra.
 
 # Item descriptions
+Focus: The highlight color of selected games in the game launch panel
+
 Friends_InGame: The text color of a friends name while they are in a game
 
 Friends_Online: The text color of a friends name while they are online

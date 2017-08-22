@@ -1,0 +1,8 @@
+# Ignore those random Mac files
+.DS_Store
+
+# Ignore vim swap files
+*.swp
+
+# Left-over generated color file
+resources/*
