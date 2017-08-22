@@ -15,6 +15,8 @@ Wal Steam is a tiny program that is meant to work with either of them, by readin
 
 ## Install
 
+**Update:** We now have an aur package [python-wal-steam-git.](https://aur.archlinux.org/packages/python-wal-steam-git) Thanks to [/u/_tague on reddit.](https://www.reddit.com/user/_tague)
+
 The install is very simple and if you run into any problems just submit an issue and we should be able to resolve it fairly quickly.
 
 First install wal or wpgtk (I'd suggest wpgtk since it will theme gtk too)
