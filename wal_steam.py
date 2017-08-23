@@ -259,5 +259,5 @@ def main(arguments):
             makeStyle(colors)
 
 if __name__ == '__main__':
-    arguments = docopt(__doc__, version='Wal Steam 1.1.0') # create the flags from the comment
+    arguments = docopt(__doc__, version='Wal Steam 1.2.0') # create the flags from the comment
     main(arguments)
