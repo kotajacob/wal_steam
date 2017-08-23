@@ -31,143 +31,38 @@ import os                                 # getting paths
 import urllib.request                     # downloading the zip files
 import zipfile                            # extracting the zip files
 from distutils.dir_util import copy_tree  # copytree from shutil is FUCKING GARBAGE for no reason so we use this instead
+import json                               # writing and reading the config file
 
 # set some variables for the file locations
 ROOT_DIR = os.path.expanduser("~/.cache/wal_steam/")
+SKIN_NAME = "Metro 4.2.4"
+CONFIG_FILE = "config.json"
 
-metroUrl           = "http://metroforsteam.com/downloads/4.2.4.zip"
-metroPatchUrl      = "http://github.com/redsigma/UPMetroSkin/archive/master.zip"
+STEAM_DIR_OTHER = os.path.expanduser("~/.steam/steam/skins")
+STEAM_DIR_UBUNTU = os.path.expanduser("~/.steam/skins")
+WAL_COLORS = os.path.expanduser("~/.cache/wal/colors.css")
+WPG_COLORS = os.path.expanduser("~/.wallpapers/current.css")
 
-metroZip           = os.path.join(ROOT_DIR, "metroZip.zip")
-metroPatchZip      = os.path.join(ROOT_DIR, "metroPatchZip.zip")
-metroResource      = os.path.join(ROOT_DIR, "metroZip/")
-metroPatchResource = os.path.join(ROOT_DIR, "metroPatchZip/")
-metroPatchCopy     = os.path.join(ROOT_DIR, "metroPatchZip/UPMetroSkin-master/Unofficial 4.2.4 Patch/Main Files [Install First]/")
-metroCopy          = os.path.join(ROOT_DIR, "metroZip/Metro 4.2.4/")
+METRO_URL = "http://metroforsteam.com/downloads/4.2.4.zip"
+METRO_ZIP = os.path.join(ROOT_DIR, "metroZip.zip")
+METRO_DIR = os.path.join(ROOT_DIR, "metroZip")
+METRO_COPY = os.path.join(METRO_DIR, "Metro 4.2.4")
 
-metroInstallOther  = os.path.expanduser("~/.steam/steam/skins/Metro 4.2.4 Wal_Mod/")
-metroInstallUbuntu = os.path.expanduser("~/.steam/skins/Metro 4.2.4 Wal_Mod/")
-steamSkins         = os.path.expanduser("~/.steam/steam/skins/")
-steamSkinsUbuntu   = os.path.expanduser("~/.steam/skins/")
+METRO_PATCH_URL = "http://github.com/redsigma/UPMetroSkin/archive/master.zip"
+METRO_PATCH_ZIP = os.path.join(ROOT_DIR, "metroPatchZip.zip")
+METRO_PATCH_DIR = os.path.join(ROOT_DIR, "metroPatchZip")
+METRO_PATCH_COPY = os.path.join(METRO_PATCH_DIR, "UPMetroSkin-master/Unofficial 4.2.4 Patch/Main Files [Install First]")
 
-newColors          = os.path.join(ROOT_DIR, "colors.styles")
-wpgConfig          = os.path.expanduser("~/.wallpapers/current.css")
-walConfig          = os.path.expanduser("~/.cache/wal/colors.css")
+def setColors(colors, config):
+    print (colors)
+    print (config)
 
-# Set metro install
-if os.path.isdir(steamSkins):
-    # use "other" path
-    metroInstall = metroInstallOther
-elif os.path.isdir(steamSkinsUbuntu):
-    # use "ubuntu" path
-    metroInstall = metroInstallUbuntu
-else:
-    # no steam found
-    sys.exit("Error: Steam not found!")
-
-
-def tupToPrint(tup):
-    tmp = ' '.join(map(str, tup)) # convert the tupple (rgb color) to a string ready to print
-    return tmp
-
-def checkDir(dirName):
-    # check if wal_steam has been run before
-    if os.path.isdir(dirName):
-        return True
-    else:
-        return False
-
-def makeStyle(colors):
-    # create and write the colors.styles file
-    print("Patching new colors")
-
-    try:
-        os.remove(newColors) # just in case it was already there for some reason
-    except FileNotFoundError:
-        print("No file to remove")
-    f_name = open(newColors, 'w')
-
-    # First write the variables we aren't changing
-    f_name.write('\"settings.styles\"\n')
-    f_name.write('{\n')
-    f_name.write('\tcolors\n')
-    f_name.write('\t{\n')
-    f_name.write('\t\tnone=\"0 0 0 0\"\n')
-    f_name.write('\t\tFocus_T=\"0 114 198 30.6\"\n')
-    f_name.write('\t\twhite03=\"255 255 255 7.65\"\n')
-    f_name.write('\t\twhite08=\"255 255 255 20.4\"\n')
-    f_name.write('\t\twhite05=\"255 255 255 12.75\"\n')
-    f_name.write('\t\twhite10=\"255 255 255 25.5\"\n')
-    f_name.write('\t\twhite12=\"255 255 255 30.6\"\n')
-    # f.write('\t\twhite15=\"255 255 255 \"\n') this was commented in the file...
-    f_name.write('\t\twhite20=\"255 255 255 51\"\n')
-    f_name.write('\t\twhite24=\"255 255 255 61.2\"\n')
-    f_name.write('\t\twhite25=\"255 255 255 63.75\"\n')
-    f_name.write('\t\twhite35=\"255 255 255 89.25\"\n')
-    f_name.write('\t\twhite45=\"255 255 255 114.75\"\n')
-    f_name.write('\t\twhite50=\"255 255 255 127.5\"\n')
-    f_name.write('\t\twhite75=\"255 255 255 191.25\"\n')
-    f_name.write('\t\twhite=\"255 255 255 255\"\n')
-    f_name.write('\t\tblack03=\"0 0 0 7.65\"\n')
-    f_name.write('\t\tblack08=\"0 0 0 20.4\"\n')
-    f_name.write('\t\tblack05=\"0 0 0 12.75\"\n')
-    f_name.write('\t\tblack10=\"0 0 0 25.5\"\n')
-    f_name.write('\t\tblack12=\"0 0 0 30.6\"\n')
-    # f.write('\t\tblack15=\"0 0 0 38.25\"\n') this was commented in the file too...
-    f_name.write('\t\tblack20=\"0 0 0 51\"\n')
-    f_name.write('\t\tblack24=\"0 0 0 61.2\"\n')
-    f_name.write('\t\tblack35=\"0 0 0 106\"\n')
-    f_name.write('\t\tblack25=\"0 0 0 63.75\"\n')
-    f_name.write('\t\tblack75=\"0 0 0 191.25\"\n')
-    f_name.write('\t\tBlack=\"0 0 0 255\"\n')
-    f_name.write('\t\tScroll_blu=\"88 168 242 165\"\n')
-    f_name.write('\t\tScroll_blu_s=\"103 193 245 175\"\n')
-    f_name.write('\t\tDetailsBackground=\"Black45\"\n')
-    f_name.write('\t\tDetailPanels=\"black45\"\n')
-    f_name.write('\t\tOverlaySidePanels=\"255 255 255 144.75\"\n')
-    f_name.write('\t\tOverlayHover05=\"255 255 255 12.75\"\n')
-    f_name.write('\t\ttransparent_notification=\"5 5 5 229.5\"\n')
-    f_name.write('\t\tchatframe=\"White50\"\n')
-    f_name.write('\t\tScrollBar=\"86 86 86 255\"\n')
-    f_name.write('\t\tScrollBarH=\"110 110 110 255\"\n')
-    f_name.write('\t\tGrey1=\"40 40 40 255\"\n')
-    f_name.write('\t\tGrey2=\"48 48 48 255\"\n')
-    f_name.write('\t\tGrey3=\"75 75 75 255\"\n')
-    f_name.write('\t\tClientBGTransparent=\"43 43 43 191.25\"\n')
-    f_name.write('\t\tRed=\"255 0 0 255\"\n')
-    f_name.write('\t\tW10close_Red_h=\"232 18 35 255\"\n')
-    f_name.write('\t\tW10close_Red_p=\"241 112 121 255\"\n')
-
-    # Now for some variables we are changing
-    f_name.write('\t\tblack45=\"' + tupToPrint(colors[0]) + ' 120' + '\"\n')
-    f_name.write('\t\tFocus=\"' + tupToPrint(colors[4]) + ' 255' + '\"\n')
-    f_name.write('\t\tFriends_InGame=\"' + tupToPrint(colors[1]) + ' 255' + '\"\n')
-    f_name.write('\t\tFriends_Online=\"' + tupToPrint(colors[2]) + ' 255' + '\"\n')
-    f_name.write('\t\tFrameBorder=\"' + tupToPrint(colors[0]) + ' 255' + '\"\n')
-    f_name.write('\t\tGameList=\"' + tupToPrint(colors[0]) + ' 255' + '\"\n')
-    f_name.write('\t\tDividers=\"' + tupToPrint(colors[15]) + ' 255' + '\"\n')
-    f_name.write('\t\tSeperator=\"' + tupToPrint(colors[15]) + ' 255' + '\"\n')
-    f_name.write('\t\tOverlayBackground=\"' + tupToPrint(colors[0]) + ' 80' + '\"\n')
-    f_name.write('\t\tOverlayPanels=\"' + tupToPrint(colors[0]) + ' 120' + '\"\n')
-    f_name.write('\t\tOverlayClock=\"' + tupToPrint(colors[15]) + ' 120' + '\"\n')
-    f_name.write('\t\tOverlaySideButtons=\"' + tupToPrint(colors[1]) + ' 120' + '\"\n')
-    f_name.write('\t\tOverlaySideButtons_h=\"' + tupToPrint(colors[4]) + ' 120' + '\"\n')
-    f_name.write('\t\tTextEntry=\"' + tupToPrint(colors[0]) + ' 255' + '\"\n')
-    f_name.write('\t\tHeader_Dark=\"' + tupToPrint(colors[0]) + ' 255' + '\"\n')
-    f_name.write('\t\tClientBG=\"' + tupToPrint(colors[0]) + ' 255' + '\"\n')
-
-    # Final formatting stuff
-    f_name.write('\t}\n')
-    f_name.write('}\n')
-
-    f_name.close()
-    copy(newColors, metroInstall)
-    # cleanup by removing generated color file
-    os.remove(newColors)
-    print("Wal colors are now patched and ready to go")
-    print("If this is your first run you may have to ")
-    print("enable Metro Wal Mod skin in steam then ")
-    print("simply restart steam!")
+def getConfig():
+    # read the config file and return a dictionary of the variables and color variables
+    f = open(os.path.join(ROOT_DIR, CONFIG_FILE), 'r')
+    result = json.load(f)
+    f.close()
+    return result
 
 def hexToRgb(hexColors):
     # convert hex colors to rgb colors (takes a list)
@@ -181,82 +76,150 @@ def hexToRgb(hexColors):
         tmpColors.append(tuple(int(tmp[i:i+2], 16) for i in (0, 2 ,4)))
     return tmpColors
 
-def parseCss(config):
-    # parse colors file and return colors in list
+def getColors(mode):
+    if (mode == 0):
+        # using colors from wal
+        colorsFile = WAL_COLORS
+    else:
+        # using colors from wpg
+        colorsFile = WPG_COLORS
+    # parse the file
     print("Reading colors")
-    f_name = open(config, 'r')
-    raw_file = f_name.readlines() # save lines into raw_file
-    del raw_file[0:11] # delete elements up to the colors
-    del raw_file[16]   # also that last line is just a } (16 now because we removed some already)
+    f = open(colorsFile, 'r')
+    rawFile = f.readlines() # save the lines to rawFile
+    # delete the lines not involving the colors
+    del rawFile[0:11]
+    del rawFile[16]
 
+    # loop through rawFile and store colors in a list
     colors = []
-    for line in raw_file: # loop through raw_file
-        tmp = line[line.find("#"):] # remove everything before the octothorpe
-        tmp = tmp[:7] # remove everything after the color
+    for line in rawFile:
+        # delete everything but the hex code
+        tmp = line[line.find("#"):]
+        tmp = tmp[:7]
 
-        colors.append(tmp) # add tmp to the new list
+        # append the hex code to the colors list
+        colors.append(tmp)
 
-    f_name.close()
+    f.close()
     return colors
 
-##################
-# For installing #
-#   Wal Steam    #
-##################
+def getMode(arguments):
+    if (arguments['-w'] == True):
+        return 0
+    if (arguments['-g'] == True):
+        return 1
 
-def makeCache():
-    os.mkdir(ROOT_DIR)
+##########################
+#                        #
+# checkInstall functions #
+#                        #
+##########################
 
-def downloadMetro():
-    # download metro for steam
-    # download metro for steam patch
+def checkSkin(oSys):
+    # check if the skin is in the skin folder
+    if (oSys == 0):
+        # path is os other
+        if not os.path.isdir(os.path.join(STEAM_DIR_OTHER, SKIN_NAME)):
+            # skin was not found, copy it over
+            print("Installing skin")
+            copy_tree(METRO_PATCH_COPY, os.path.join(STEAM_DIR_OTHER, SKIN_NAME))
+        else:
+            print("Wal Steam skin found")
+    else:
+        # path is os ubuntu
+        if not os.path.isdir(os.path.join(STEAM_DIR_UBUNTU, SKIN_NAME)):
+            # skin was not found, copy it over
+            print("Installing skin")
+            copy_tree(METRO_PATCH_COPY, os.path.join(STEAM_DIR_UBUNTU, SKIN_NAME))
+        else:
+            print("Wal Steam skin found")
+
+def checkOs():
+    # check if ~/.steam/steam/skins exists
+    if os.path.isdir(STEAM_DIR_OTHER):
+        return 0
+    # check if ~/.steam/skins exists
+    elif os.path.isdir(STEAM_DIR_UBUNTU):
+        return 1
+    # close with error message otherwise
+    else:
+        sys.exit("Error: Steam install not found!")
+
+def makeSkin():
+    # download metro for steam and extract
     print("Downloading Metro for steam")
-    urllib.request.urlretrieve(metroUrl, metroZip)
-    z = zipfile.ZipFile(metroZip, 'r')
-    z.extractall(metroResource)
-    z.close()
-    print("Downloading Metro patch")
-    urllib.request.urlretrieve(metroPatchUrl, metroPatchZip)
-    z = zipfile.ZipFile(metroPatchZip, 'r')
-    z.extractall(metroPatchResource)
+    urllib.request.urlretrieve(METRO_URL, METRO_ZIP)
+    z = zipfile.ZipFile(METRO_ZIP, 'r')
+    z.extractall(METRO_DIR)
     z.close()
 
-def installMetro():
-    print("Installing Metro Wal")
-    copy_tree(metroPatchCopy, metroCopy) # use copy_tree not copytree, shutil copytree is broken
-    copy_tree(metroCopy, metroInstall)
-    print("Metro Wal is now installed")
+    # download metro for steam patch and extract
+    print("Downloading Metro patch")
+    urllib.request.urlretrieve(METRO_PATCH_URL, METRO_PATCH_ZIP)
+    z = zipfile.ZipFile(METRO_PATCH_ZIP, 'r')
+    z.extractall(METRO_PATCH_DIR)
+    z.close()
+
+    # finally apply the patch
+    copy_tree(METRO_PATCH_COPY, METRO_COPY) # use copy_tree not copytree, shutil copytree is broken
+
+def makeConfig():
+    # generate the config if it's missing
+    # obviously this is a huge block of code
+    f = open(os.path.join(ROOT_DIR, CONFIG_FILE), 'w')
+    config = dict(black45=0, Focus=4, Friends_InGame=1, Friends_Online=2, FrameBorder=0, GameList=0, Dividers=15, Seperator=15, OverlayBackground=0, OverlayPanels=0, OverlayClock=15, OverlaySideButtons=1, OverlaySideButtons_h=4, TextEntry=0, Header_Dark=0, ClientBG=0)
+    # write to json config
+    json.dump(config, f)
+    f.close()
+
+def checkCache():
+    # check for the cache
+    if not os.path.isdir(ROOT_DIR):
+        # make the config directory
+        os.mkdir(ROOT_DIR)
+
+        # make the config file
+        makeConfig()
+
+        # download, extract, and patch metro for steam
+        makeSkin()
+    else:
+        # cache folder exists
+        print("Wal Steam cache found")
 
 def checkInstall():
-    if not checkDir(ROOT_DIR):
-        # wal_steam cache missing
-        # redownload and patch
-        makeCache()
-        downloadMetro()
-        installMetro()
-    else:
-        # cache was found
-        # check for skin
-        if not checkDir(metroInstall):
-            # metro install missing
-            downloadMetro()
-            installMetro()
-        else:
-            # metro install found
-            print("Metro install found")
+    # check if the cache exists, make it if not
+    checkCache()
+
+    # check where the os installed steam
+    # 0 = ~/.steam/steam/skins - more common
+    # 1 = ~/.steam/skins       - used on ubuntu and its derivatives
+    oSys = checkOs()
+
+    # check if the skin is installed, install it if not
+    checkSkin(oSys)
 
 def main(arguments):
+    # check for the cache, the skin, and get them if needed
     checkInstall()
 
-    if (arguments['--help'] == False and arguments['--version'] == False): # determine the mode
-        if (arguments['-g'] == True):
-            colors = parseCss(wpgConfig) # they picked g so parse wpg
-            colors = hexToRgb(colors)
-            makeStyle(colors)
-        else:
-            colors = parseCss(walConfig) # they picked w so parse wal
-            colors = hexToRgb(colors)
-            makeStyle(colors)
+    # use the arguments to set a mode variable
+    # 0 = wal
+    # 1 = wpgtk
+    mode = getMode(arguments)
+
+    # get a list from either wal or wpg based on the mode
+    colors = getColors(mode)
+
+    # convert our list of colors from hex to rgb
+    colors = hexToRgb(colors)
+
+    # get a dictionary of the config settings from the config file
+    config = getConfig()
+
+    # finally create a temp colors.styles and copy it in updating the skin
+    setColors(colors, config)
 
 if __name__ == '__main__':
     arguments = docopt(__doc__, version='Wal Steam 1.2.0') # create the flags from the comment
