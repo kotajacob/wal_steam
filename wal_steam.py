@@ -70,12 +70,6 @@ def tupToPrint(tup):
     tmp = ' '.join(map(str, tup)) # convert the tupple (rgb color) to a string ready to print
     return tmp
 
-def checkDir(dirName):
-    # check if wal_steam has been run before
-    if os.path.isdir(dirName):
-        return True
-    else:
-        return False
 
 def makeStyle(colors):
     # create and write the colors.styles file
@@ -228,7 +222,7 @@ def installMetro():
     print("Metro Wal is now installed")
 
 def checkInstall():
-    if not checkDir(ROOT_DIR):
+    if not os.path.isdir(ROOT_DIR):
         # wal_steam cache missing
         # redownload and patch
         makeCache()
@@ -237,7 +231,7 @@ def checkInstall():
     else:
         # cache was found
         # check for skin
-        if not checkDir(metroInstall):
+        if not os.path.isdir(metroInstall):
             # metro install missing
             downloadMetro()
             installMetro()
