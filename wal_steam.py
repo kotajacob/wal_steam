@@ -60,8 +60,6 @@ def tupToPrint(tup):
     return tmp
 
 def setColors(colors, config, oSys):
-    print (colors)
-    print (config)
     print ("Patching new colors")
 
     # delete the old colors file if present in cache
@@ -125,8 +123,7 @@ def setColors(colors, config, oSys):
 
     # Now write the variables we will be changing
     for i in config:
-        print(i)
-        print(tupToPrint(colors[config[i]])) # basically we convert the color from the index of config (the wal color variable) into a printable string
+        # basically we need to write the steam variable and the color from the config dict
         f.write('\t\t' + i + '=\"' + tupToPrint(colors[config[i]]) + ' ' + '255' +  '\"\n')
 
     # Final formatting stuff
