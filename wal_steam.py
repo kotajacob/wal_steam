@@ -24,13 +24,13 @@ Options:
   -h --help            show this help message and exit
   -v --version         show version and exit
 """
-from lib.docopt import docopt             # argument parsing
-from shutil import move                   # moveing files
-from shutil import copy                   # copying files
+import shutil                             # copying files
 import os                                 # getting paths
 import urllib.request                     # downloading the zip files
 import zipfile                            # extracting the zip files
+import sys
 from distutils.dir_util import copy_tree  # copytree from shutil is FUCKING GARBAGE for no reason so we use this instead
+from lib.docopt import docopt             # argument parsing
 
 # set some variables for the file locations
 ROOT_DIR = os.path.expanduser("~/.cache/wal_steam/")
@@ -161,7 +161,7 @@ def makeStyle(colors):
     f_name.write('}\n')
 
     f_name.close()
-    copy(newColors, metroInstall)
+    shutil.copy(newColors, metroInstall)
     # cleanup by removing generated color file
     os.remove(newColors)
     print("Wal colors are now patched and ready to go")
