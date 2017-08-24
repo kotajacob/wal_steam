@@ -1,4 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+"""
+Wal Steam
 
 #----------------------------------#
 # ,--. ,--.         ,--.           #
@@ -9,21 +11,8 @@
 #            kotajacob.tk          #
 # Copyright (C) 2017  Dakota Walsh #
 #----------------------------------#
-
 """
-Wal Steam
 
-Usage:
-  wal_steam.py (-w | -g)
-  wal_steam.py (-h | --help)
-  wal_steam.py (-v | --version)
-
-Options:
-  -w                   use wal for colors
-  -g                   use wpg for colors
-  -h --help            show this help message and exit
-  -v --version         show version and exit
-"""
 import argparse
 from shutil import move                   # moveing files
 from shutil import copy                   # copying files
