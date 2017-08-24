@@ -24,14 +24,14 @@ Options:
   -h --help            show this help message and exit
   -v --version         show version and exit
 """
-from lib.docopt import docopt             # argument parsing
+import shutil                             # copying files
 import os                                 # getting paths
-from shutil import move                   # moveing files
-from shutil import copy                   # copying files
-from distutils.dir_util import copy_tree  # copytree from shutil is FUCKING GARBAGE for no reason so we use this instead
 import urllib.request                     # downloading the zip files
 import zipfile                            # extracting the zip files
+import sys
 import json                               # writing and reading the config file
+from distutils.dir_util import copy_tree  # copytree from shutil is GARBAGE so use this instead
+from lib.docopt import docopt             # argument parsing
 
 # set some variables for the file locations
 ROOT_DIR         = os.path.expanduser("~/.cache/wal_steam/")
@@ -137,10 +137,10 @@ def setColors(colors, config, oSys):
     # now copy it to the proper place based on the os
     if (oSys == 0):
         # linux other
-        copy(COLORS_FILE, os.path.join(STEAM_DIR_OTHER, SKIN_NAME))
+        shutil.copy(COLORS_FILE, os.path.join(STEAM_DIR_OTHER, SKIN_NAME))
     else:
         # linux ubuntu
-        copy(COLORS_FILE, os.path.join(STEAM_DIR_UBUNTU, SKIN_NAME))
+        shutil.copy(COLORS_FILE, os.path.join(STEAM_DIR_UBUNTU, SKIN_NAME))
 
     # cleanup by removing generated color file
     os.remove(COLORS_FILE)
