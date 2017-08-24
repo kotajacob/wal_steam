@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+"""
+Wal Steam
 
 #----------------------------------#
 # ,--. ,--.         ,--.           #
@@ -9,21 +11,8 @@
 #            kotajacob.tk          #
 # Copyright (C) 2017  Dakota Walsh #
 #----------------------------------#
-
 """
-Wal Steam
 
-Usage:
-  wal_steam.py (-w | -g)
-  wal_steam.py (-h | --help)
-  wal_steam.py (-v | --version)
-
-Options:
-  -w                   use wal for colors
-  -g                   use wpg for colors
-  -h --help            show this help message and exit
-  -v --version         show version and exit
-"""
 import shutil                             # copying files
 import os                                 # getting paths
 import urllib.request                     # downloading the zip files
@@ -34,6 +23,7 @@ from lib.docopt import docopt             # argument parsing
 
 # set some variables for the file locations
 ROOT_DIR = os.path.expanduser("~/.cache/wal_steam/")
+__version__ = "1.1.0"
 
 metroUrl           = "http://metroforsteam.com/downloads/4.2.4.zip"
 metroPatchUrl      = "http://github.com/redsigma/UPMetroSkin/archive/master.zip"
@@ -239,19 +229,40 @@ def checkInstall():
             # metro install found
             print("Metro install found")
 
-def main(arguments):
-    checkInstall()
 
-    if (arguments['--help'] == False and arguments['--version'] == False): # determine the mode
-        if (arguments['-g'] == True):
-            colors = parseCss(wpgConfig) # they picked g so parse wpg
-            colors = hexToRgb(colors)
-            makeStyle(colors)
-        else:
-            colors = parseCss(walConfig) # they picked w so parse wal
-            colors = hexToRgb(colors)
-            makeStyle(colors)
+def get_args():
+    """Get the script arguments."""
+    description = "wal Steam"
+    arg = argparse.ArgumentParser(description=description)
+
+    arg.add_argument("-v", "--version", action="store_true",
+                     help="Print wal_steam version.")
+
+    arg.add_argument("-g", action="store_true",
+                     help="Get colors from wpg.")
+
+    arg.add_argument("-w", action="store_true",
+                     help="Get colors from wal.")
+
+    return arg.parse_args()
+
+def main():
+    args = get_args()
+
+    if args.version:
+        print("wal_steam %s" % __version__)
+        sys.exit()
+
+    if args.g:
+        colors = parseCss(wpgConfig)  # wpg
+
+    else:
+        colors = parseCss(walConfig)  # wal
+
+    checkInstall()
+    colors = hexToRgb(colors)
+    makeStyle(colors)
+
 
 if __name__ == '__main__':
-    arguments = docopt(__doc__, version='Wal Steam 1.1.0') # create the flags from the comment
-    main(arguments)
+    main()
