@@ -122,9 +122,13 @@ def setColors(colors, config, oSys):
     f.write('\t\tW10close_Red_p=\"241 112 121 255\"\n')
 
     # Now write the variables we will be changing
+    ii = 0
     for i in config:
         # basically we need to write the steam variable and the color from the config dict
-        f.write('\t\t' + i + '=\"' + tupToPrint(colors[config[i]]) + ' ' + '255' +  '\"\n')
+        if (ii % 2 == 0):
+            alpha = "alpha_" + i
+            f.write('\t\t' + i + '=\"' + tupToPrint(colors[config[i]]) + ' ' + str(config[alpha])  +  '\"\n')
+        ii = ii + 1
 
     # Final formatting stuff
     f.write('\t}\n')
@@ -242,7 +246,7 @@ def makeConfig():
     # generate the config if it's missing
     # obviously this is a huge block of code
     f = open(os.path.join(ROOT_DIR, CONFIG_FILE), 'w')
-    config = dict(black45=0, Focus=4, Friends_InGame=1, Friends_Online=2, FrameBorder=0, GameList=0, Dividers=15, Seperator=15, OverlayBackground=0, OverlayPanels=0, OverlayClock=15, OverlaySideButtons=1, OverlaySideButtons_h=4, TextEntry=0, Header_Dark=0, ClientBG=0)
+    config = dict(black45=0, alpha_black45=120, Focus=4, alpha_Focus=255, Friends_InGame=1, alpha_Friends_InGame=255, Friends_Online=2, alpha_Friends_Online=255, FrameBorder=0, alpha_FrameBorder=255, GameList=0, alpha_GameList=255, Dividers=15, alpha_Dividers=255, Seperator=15, alpha_Seperator=255, OverlayBackground=0, alpha_OverlayBackground=80, OverlayPanels=0, alpha_OverlayPanels=120, OverlayClock=15, alpha_OverlayClock=120, OverlaySideButtons=1, alpha_OverlaySideButtons=120, OverlaySideButtons_h=4, alpha_OverlaySideButtons_h=120, TextEntry=0, alpha_TextEntry=255, Header_Dark=0, alpha_Header_Dark=255, ClientBG=0, alpha_ClientBG=255)
     # write to json config
     json.dump(config, f)
     f.close()
