@@ -29,9 +29,9 @@ import os                                 # getting paths
 import urllib.request                     # downloading the zip files
 import zipfile                            # extracting the zip files
 import sys
+import argparse                           # argument parsing
 import json                               # writing and reading the config file
-from distutils.dir_util import copy_tree  # copytree from shutil is GARBAGE so use this instead
-from lib.docopt import docopt             # argument parsing
+from distutils.dir_util import copy_tree  # copytree from shutil is broken so use copy_tree
 
 # set some variables for the file locations
 ROOT_DIR         = os.path.expanduser("~/.cache/wal_steam/")
@@ -197,12 +197,6 @@ def getColors(mode):
     f.close()
     return colors
 
-def getMode(arguments):
-    if (arguments['-w'] == True):
-        return 0
-    if (arguments['-g'] == True):
-        return 1
-
 ##########################
 # checkInstall functions #
 ##########################
@@ -286,7 +280,44 @@ def checkOs():
     else:
         sys.exit("Error: Steam install not found!")
 
-def main(arguments):
+def getArgs():
+    # get the arguments with argparse
+    description = "Wal Steam"
+    arg = argparse.ArgumentParser(description=description)
+
+    arg.add_argument("-v", "--version", action="store_true",
+            help="Print wal_steam version.")
+
+    arg.add_argument("-w", action="store_true",
+            help="Get colors from wal.")
+
+    arg.add_argument("-g", action="store_true",
+            help="Get colors from wpg.")
+
+    return arg.parse_args()
+
+def main():
+    # set default mode to wal
+    # 0 = wal
+    # 1 = wpgtk
+    mode = 0
+
+    # parse the arguments
+    arguments = getArgs()
+    if arguments.version:
+        print(VERSION)
+        sys.exit()
+
+    # make sure they didn't select both wal and wpg
+    if arguments.w and arguments.g:
+        sys.exit("Error: You must select wpg or wal")
+
+    # set the mode for either wal or wpg
+    if arguments.w:
+        mode = 0
+    if arguments.g:
+        mode = 1
+
     # check where the os installed steam
     # 0 = ~/.steam/steam/skins - more common
     # 1 = ~/.steam/skins       - used on ubuntu and its derivatives
@@ -294,11 +325,6 @@ def main(arguments):
 
     # check for the cache, the skin, and get them if needed
     checkInstall(oSys)
-
-    # use the arguments to set a mode variable
-    # 0 = wal
-    # 1 = wpgtk
-    mode = getMode(arguments)
 
     # get a list from either wal or wpg based on the mode
     colors = getColors(mode)
@@ -313,5 +339,4 @@ def main(arguments):
     setColors(colors, config, oSys)
 
 if __name__ == '__main__':
-    arguments = docopt(__doc__, version=VERSION) # create the flags from the comment
-    main(arguments)
+    main()
