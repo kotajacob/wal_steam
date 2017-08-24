@@ -36,6 +36,7 @@ import json                               # writing and reading the config file
 # set some variables for the file locations
 ROOT_DIR         = os.path.expanduser("~/.cache/wal_steam/")
 SKIN_NAME        = "Metro 4.2.4 Wal_Mod"
+VERSION          = "Wal Steam 1.2.0"
 CONFIG_FILE      = "config.json"
 COLORS_FILE      = os.path.join(ROOT_DIR, "colors.styles")
 
@@ -315,5 +316,5 @@ def main(arguments):
     setColors(colors, config, oSys)
 
 if __name__ == '__main__':
-    arguments = docopt(__doc__, version='Wal Steam 1.2.0') # create the flags from the comment
+    arguments = docopt(__doc__, version=VERSION) # create the flags from the comment
     main(arguments)
