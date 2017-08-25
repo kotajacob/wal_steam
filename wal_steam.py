@@ -44,6 +44,7 @@ CONFIG_URL       = "https://raw.githubusercontent.com/kotajacob/wal_steam_config
 
 STEAM_DIR_OTHER  = os.path.expanduser("~/.steam/steam/skins")
 STEAM_DIR_UBUNTU = os.path.expanduser("~/.steam/skins")
+STEAM_DIR_WINDOWS = "C:\Program Files (x86)\Steam\skins"
 WAL_COLORS       = os.path.expanduser("~/.cache/wal/colors.css")
 WPG_COLORS       = os.path.expanduser("~/.wallpapers/current.css")
 
@@ -217,12 +218,20 @@ def checkSkin(oSys):
             copy_tree(METRO_PATCH_COPY, os.path.join(STEAM_DIR_OTHER, SKIN_NAME))
         else:
             print("Wal Steam skin found")
-    else:
+    elif (oSys == 1):
         # path is os ubuntu
         if not os.path.isdir(os.path.join(STEAM_DIR_UBUNTU, SKIN_NAME)):
             # skin was not found, copy it over
             print("Installing skin")
             copy_tree(METRO_PATCH_COPY, os.path.join(STEAM_DIR_UBUNTU, SKIN_NAME))
+        else:
+            print("Wal Steam skin found")
+    else:
+        # path is os windows
+        if not os.path.isdir(os.path.join(STEAM_DIR_WINDOWS, SKIN_NAME)):
+            # skin was not found, copy it over
+            print("Installing skin")
+            copy_tree(METRO_PATCH_COPY, os.path.join(STEAM_DIR_WINDOWS, SKIN_NAME))
         else:
             print("Wal Steam skin found")
 
@@ -315,6 +324,9 @@ def checkOs():
     # check if ~/.steam/skins exists
     elif os.path.isdir(STEAM_DIR_UBUNTU):
         return 1
+    # check if C:\Program Files (x86)\Steam\skins exists
+    elif os.path.isdir(STEAM_DIR_WINDOWS):
+        return 2
     # close with error message otherwise
     else:
         sys.exit("Error: Steam install not found!")
@@ -358,8 +370,9 @@ def main():
         mode = 1
 
     # check where the os installed steam
-    # 0 = ~/.steam/steam/skins - more common
-    # 1 = ~/.steam/skins       - used on ubuntu and its derivatives
+    # 0 = ~/.steam/steam/skins               - common linux install location
+    # 1 = ~/.steam/skins                     - used on ubuntu and its derivatives
+    # 2 = C:\Program Files (x86)\Steam\skins - used on windows
     oSys = checkOs()
 
     # check for the cache, the skin, and get them if needed
