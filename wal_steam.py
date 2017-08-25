@@ -35,6 +35,7 @@ from distutils.dir_util import copy_tree  # copytree from shutil is broken so us
 
 # set some variables for the file locations
 ROOT_DIR         = os.path.expanduser("~/.cache/wal_steam/")
+CONFIG_DIR       = os.path.expanduser("~/.config/wal_steam/")
 SKIN_NAME        = "Metro 4.2.4 Wal_Mod"
 VERSION          = "Wal Steam 1.2.0"
 CONFIG_FILE      = "config.json"
@@ -156,7 +157,7 @@ def setColors(colors, config, oSys):
 
 def getConfig():
     # read the config file and return a dictionary of the variables and color variables
-    f = open(os.path.join(ROOT_DIR, CONFIG_FILE), 'r')
+    f = open(os.path.join(CONFIG_DIR, CONFIG_FILE), 'r')
     result = json.load(f)
     f.close()
     return result
@@ -244,21 +245,34 @@ def makeSkin():
 
 def makeConfig():
     # generate the config if it's missing
+    print("Generating config")
     # obviously this is a huge block of code
-    f = open(os.path.join(ROOT_DIR, CONFIG_FILE), 'w')
+    f = open(os.path.join(CONFIG_DIR, CONFIG_FILE), 'w')
     config = dict(black45=0, alpha_black45=120, Focus=4, alpha_Focus=255, Friends_InGame=1, alpha_Friends_InGame=255, Friends_Online=2, alpha_Friends_Online=255, FrameBorder=0, alpha_FrameBorder=255, GameList=0, alpha_GameList=255, Dividers=15, alpha_Dividers=255, Seperator=15, alpha_Seperator=255, OverlayBackground=0, alpha_OverlayBackground=80, OverlayPanels=0, alpha_OverlayPanels=120, OverlayClock=15, alpha_OverlayClock=120, OverlaySideButtons=1, alpha_OverlaySideButtons=120, OverlaySideButtons_h=4, alpha_OverlaySideButtons_h=120, TextEntry=0, alpha_TextEntry=255, Header_Dark=0, alpha_Header_Dark=255, ClientBG=0, alpha_ClientBG=255)
     # write to json config
     json.dump(config, f)
     f.close()
 
+def checkConfig():
+    # check for the config
+    if not os.path.isdir(CONFIG_DIR):
+        # make the config directory
+        os.mkdir(CONFIG_DIR)
+
+        # download or make config file
+        makeConfig()
+    elif not os.path.isfile(os.path.join(CONFIG_DIR, CONFIG_FILE)):
+        # download or make the config file
+        makeConfig()
+    else:
+        # config file found!
+        print("Wal Steam config found")
+
 def checkCache():
     # check for the cache
     if not os.path.isdir(ROOT_DIR):
-        # make the config directory
+        # make the cache directory
         os.mkdir(ROOT_DIR)
-
-        # make the config file
-        makeConfig()
 
         # download, extract, and patch metro for steam
         makeSkin()
@@ -269,6 +283,9 @@ def checkCache():
 def checkInstall(oSys):
     # check if the cache exists, make it if not
     checkCache()
+
+    # check if the config file exists
+    checkConfig()
 
     # check if the skin is installed, install it if not
     checkSkin(oSys)
