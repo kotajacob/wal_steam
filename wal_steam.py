@@ -40,6 +40,7 @@ SKIN_NAME        = "Metro 4.2.4 Wal_Mod"
 VERSION          = "Wal Steam 1.2.0"
 CONFIG_FILE      = "config.json"
 COLORS_FILE      = os.path.join(ROOT_DIR, "colors.styles")
+CONFIG_URL       = "https://raw.githubusercontent.com/kotajacob/wal_steam_config/master/config.json"
 
 STEAM_DIR_OTHER  = os.path.expanduser("~/.steam/steam/skins")
 STEAM_DIR_UBUNTU = os.path.expanduser("~/.steam/skins")
@@ -249,7 +250,7 @@ def makeSkin():
     # finally apply the patch
     copy_tree(METRO_PATCH_COPY, METRO_COPY) # use copy_tree not copytree, shutil copytree is broken
 
-def makeConfig():
+def genConfig():
     # generate the config if it's missing
     print("Generating config")
     # obviously this is a huge block of code
@@ -258,6 +259,17 @@ def makeConfig():
     # write to json config
     json.dump(config, f)
     f.close()
+
+def makeConfig():
+    # download the config for wal_steam
+    print ("Downloading config file")
+    try:
+        urllib.request.urlretrieve(CONFIG_URL, os.path.join(CONFIG_DIR, CONFIG_FILE))
+    except:
+        # problem with download
+        # generate the config instead
+        print("Error downloading needed config file. Falling back to generation")
+        genConfig()
 
 def checkConfig():
     # check for the config
