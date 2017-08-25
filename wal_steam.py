@@ -34,28 +34,29 @@ import json                               # writing and reading the config file
 from distutils.dir_util import copy_tree  # copytree from shutil is broken so use copy_tree
 
 # set some variables for the file locations
-ROOT_DIR         = os.path.expanduser("~/.cache/wal_steam/")
-CONFIG_DIR       = os.path.expanduser("~/.config/wal_steam/")
+HOME_DIR         = os.getenv("HOME", os.getenv("USERPROFILE")) # should be crossplatform
+CACHE_DIR        = os.path.join(HOME_DIR, ".cache", "wal_steam")
+CONFIG_DIR       = os.path.join(HOME_DIR, ".config", "wal_steam")
 SKIN_NAME        = "Metro 4.2.4 Wal_Mod"
 VERSION          = "Wal Steam 1.2.0"
 CONFIG_FILE      = "config.json"
-COLORS_FILE      = os.path.join(ROOT_DIR, "colors.styles")
+COLORS_FILE      = os.path.join(CACHE_DIR, "colors.styles")
 CONFIG_URL       = "https://raw.githubusercontent.com/kotajacob/wal_steam_config/master/config.json"
 
 STEAM_DIR_OTHER  = os.path.expanduser("~/.steam/steam/skins")
 STEAM_DIR_UBUNTU = os.path.expanduser("~/.steam/skins")
 STEAM_DIR_WINDOWS = "C:\Program Files (x86)\Steam\skins"
-WAL_COLORS       = os.path.expanduser("~/.cache/wal/colors.css")
-WPG_COLORS       = os.path.expanduser("~/.wallpapers/current.css")
+WAL_COLORS       = os.path.join(HOME_DIR, ".cache", "wal", "colors.css")
+WPG_COLORS       = os.path.join(HOME_DIR, ".wallpapers", "current.css")
 
 METRO_URL        = "http://metroforsteam.com/downloads/4.2.4.zip"
-METRO_ZIP        = os.path.join(ROOT_DIR, "metroZip.zip")
-METRO_DIR        = os.path.join(ROOT_DIR, "metroZip")
+METRO_ZIP        = os.path.join(CACHE_DIR, "metroZip.zip")
+METRO_DIR        = os.path.join(CACHE_DIR, "metroZip")
 METRO_COPY       = os.path.join(METRO_DIR, "Metro 4.2.4")
 
 METRO_PATCH_URL  = "https://github.com/redsigma/UPMetroSkin/archive/196feafc14deae103355b4fee1ecc4cda9288c7f.zip" # A link to the version we've tested rather than the latest, just in case they break things upstream.
-METRO_PATCH_ZIP  = os.path.join(ROOT_DIR, "metroPatchZip.zip")
-METRO_PATCH_DIR  = os.path.join(ROOT_DIR, "metroPatchZip")
+METRO_PATCH_ZIP  = os.path.join(CACHE_DIR, "metroPatchZip.zip")
+METRO_PATCH_DIR  = os.path.join(CACHE_DIR, "metroPatchZip")
 METRO_PATCH_COPY = os.path.join(METRO_PATCH_DIR, "UPMetroSkin-196feafc14deae103355b4fee1ecc4cda9288c7f/Unofficial 4.2.4 Patch/Main Files [Install First]")
 
 def tupToPrint(tup):
@@ -185,7 +186,10 @@ def getColors(mode):
         colorsFile = WPG_COLORS
     # parse the file
     print("Reading colors")
-    f = open(colorsFile, 'r')
+    try:
+        f = open(colorsFile, 'r')
+    except:
+        print("Colors file missing. Make sure you've run pywal/wpg before wal_steam")
     rawFile = f.readlines() # save the lines to rawFile
     # delete the lines not involving the colors
     del rawFile[0:11]
@@ -241,7 +245,8 @@ def makeSkin():
     try:
         urllib.request.urlretrieve(METRO_URL, METRO_ZIP)
     except:
-        sys.exit("Error downloading needed skin file. Check your connection and try again.")
+        print("Error downloading needed skin file. Check your connection and try again.")
+        sys.exit(1)
     z = zipfile.ZipFile(METRO_ZIP, 'r')
     z.extractall(METRO_DIR)
     z.close()
@@ -251,7 +256,8 @@ def makeSkin():
     try:
         urllib.request.urlretrieve(METRO_PATCH_URL, METRO_PATCH_ZIP)
     except:
-        sys.exit("Error downloading needed skin file. Check your connection and try again.")
+        print("Error downloading needed skin file. Check your connection and try again.")
+        sys.exit(1)
     z = zipfile.ZipFile(METRO_PATCH_ZIP, 'r')
     z.extractall(METRO_PATCH_DIR)
     z.close()
@@ -282,6 +288,9 @@ def makeConfig():
 
 def checkConfig():
     # check for the config
+    if not os.path.isdir(os.path.join(HOME_DIR, ".config")):
+        # make the .config folder
+        os.mkdir(os.path.join(HOME_DIR, ".config"))
     if not os.path.isdir(CONFIG_DIR):
         # make the config directory
         os.mkdir(CONFIG_DIR)
@@ -297,9 +306,12 @@ def checkConfig():
 
 def checkCache():
     # check for the cache
-    if not os.path.isdir(ROOT_DIR):
+    if not os.path.isdir(os.path.join(HOME_DIR, ".cache")):
+        # make the .cache folder
+        os.mkdir(os.path.join(HOME_DIR, ".cache"))
+    if not os.path.isdir(CACHE_DIR):
         # make the cache directory
-        os.mkdir(ROOT_DIR)
+        os.mkdir(CACHE_DIR)
 
         # download, extract, and patch metro for steam
         makeSkin()
@@ -329,7 +341,8 @@ def checkOs():
         return 2
     # close with error message otherwise
     else:
-        sys.exit("Error: Steam install not found!")
+        print("Error: Steam install not found!")
+        sys.exit(1)
 
 def getArgs():
     # get the arguments with argparse
@@ -361,7 +374,8 @@ def main():
 
     # make sure they didn't select both wal and wpg
     if arguments.w and arguments.g:
-        sys.exit("Error: You must select wpg or wal")
+        print("Error: You must select wpg or wal")
+        sys.exit(1)
 
     # set the mode for either wal or wpg
     if arguments.w:
