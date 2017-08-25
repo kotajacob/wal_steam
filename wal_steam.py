@@ -228,14 +228,20 @@ def checkSkin(oSys):
 def makeSkin():
     # download metro for steam and extract
     print("Downloading Metro for steam")
-    urllib.request.urlretrieve(METRO_URL, METRO_ZIP)
+    try:
+        urllib.request.urlretrieve(METRO_URL, METRO_ZIP)
+    except:
+        sys.exit("Error downloading needed skin file. Check your connection and try again.")
     z = zipfile.ZipFile(METRO_ZIP, 'r')
     z.extractall(METRO_DIR)
     z.close()
 
     # download metro for steam patch and extract
     print("Downloading Metro patch")
-    urllib.request.urlretrieve(METRO_PATCH_URL, METRO_PATCH_ZIP)
+    try:
+        urllib.request.urlretrieve(METRO_PATCH_URL, METRO_PATCH_ZIP)
+    except:
+        sys.exit("Error downloading needed skin file. Check your connection and try again.")
     z = zipfile.ZipFile(METRO_PATCH_ZIP, 'r')
     z.extractall(METRO_PATCH_DIR)
     z.close()
