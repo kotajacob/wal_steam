@@ -189,7 +189,9 @@ def getColors(mode):
     try:
         f = open(colorsFile, 'r')
     except:
-        print("Colors file missing. Make sure you've run pywal/wpg before wal_steam")
+        print("Error: Colors file missing. Make sure you've run pywal/wpg before wal_steam")
+        sys.exit(1)
+
     rawFile = f.readlines() # save the lines to rawFile
     # delete the lines not involving the colors
     del rawFile[0:11]
@@ -245,8 +247,9 @@ def makeSkin():
     try:
         urllib.request.urlretrieve(METRO_URL, METRO_ZIP)
     except:
-        print("Error downloading needed skin file. Check your connection and try again.")
+        print("Error: downloading needed skin file. Check your connection and try again.")
         sys.exit(1)
+
     z = zipfile.ZipFile(METRO_ZIP, 'r')
     z.extractall(METRO_DIR)
     z.close()
@@ -256,8 +259,9 @@ def makeSkin():
     try:
         urllib.request.urlretrieve(METRO_PATCH_URL, METRO_PATCH_ZIP)
     except:
-        print("Error downloading needed skin file. Check your connection and try again.")
+        print("Error: downloading needed skin file. Check your connection and try again.")
         sys.exit(1)
+
     z = zipfile.ZipFile(METRO_PATCH_ZIP, 'r')
     z.extractall(METRO_PATCH_DIR)
     z.close()
@@ -283,7 +287,7 @@ def makeConfig():
     except:
         # problem with download
         # generate the config instead
-        print("Error downloading needed config file. Falling back to generation")
+        print("Error: downloading needed config file. Falling back to generation")
         genConfig()
 
 def checkConfig():
