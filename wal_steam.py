@@ -143,9 +143,12 @@ def setColors(colors, config, oSys):
     if (oSys == 0):
         # linux other
         shutil.copy(COLORS_FILE, os.path.join(STEAM_DIR_OTHER, SKIN_NAME))
-    else:
+    elif (oSys == 1):
         # linux ubuntu
         shutil.copy(COLORS_FILE, os.path.join(STEAM_DIR_UBUNTU, SKIN_NAME))
+    else:
+        # windows
+        shutil.copy(COLORS_FILE, os.path.join(STEAM_DIR_WINDOWS, SKIN_NAME))
 
     # cleanup by removing generated color file
     os.remove(COLORS_FILE)
