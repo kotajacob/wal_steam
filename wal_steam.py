@@ -293,6 +293,16 @@ def makeConfig():
         print("Error: downloading needed config file. Falling back to generation")
         genConfig()
 
+def delConfig():
+    # delete the config
+    if os.path.isdir(CONFIG_DIR):
+        shutil.rmtree(CONFIG_DIR)
+
+def delCache():
+    # delete the cache
+    if os.path.isdir(CACHE_DIR):
+        shutil.rmtree(CACHE_DIR)
+
 def checkConfig():
     # check for the config
     if not os.path.isdir(os.path.join(HOME_DIR, ".config")):
@@ -336,6 +346,13 @@ def checkInstall(oSys):
     # check if the skin is installed, install it if not
     checkSkin(oSys)
 
+def forceUpdate():
+    # force update the cache and config files
+    delConfig()
+    delCache()
+    checkCache()
+    checkConfig()
+
 def checkOs():
     # check if ~/.steam/steam/skins exists
     if os.path.isdir(STEAM_DIR_OTHER):
@@ -365,6 +382,9 @@ def getArgs():
     arg.add_argument("-g", action="store_true",
             help="Get colors from wpg.")
 
+    arg.add_argument("-u", action="store_true",
+            help="Force update cache and config file, WARNING WILL OVERWRITE config.json")
+
     return arg.parse_args()
 
 def main():
@@ -377,6 +397,14 @@ def main():
     arguments = getArgs()
     if arguments.version:
         print(VERSION)
+        sys.exit()
+
+    # update the cache and config then exit
+    if arguments.u:
+        print("Force updating cache and config")
+        # first remove the cache and config
+        forceUpdate()
+        print("Cache and config updated")
         sys.exit()
 
     # make sure they didn't select both wal and wpg
