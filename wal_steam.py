@@ -327,7 +327,7 @@ def forceUpdate():
     checkCache()
     checkConfig()
 
-def checkOs():
+def getOs():
     # check if ~/.steam/steam/skins exists
     if os.path.isdir(STEAM_DIR_OTHER):
         return STEAM_DIR_OTHER
@@ -355,6 +355,9 @@ def getArgs():
 
     arg.add_argument("-g", action="store_true",
             help="Get colors from wpg.")
+
+    arg.add_argument("-s",
+            help="Enter a custom steam skin directory")
 
     arg.add_argument("-u", action="store_true",
             help="Force update cache and config file, WARNING WILL OVERWRITE config.json")
@@ -392,11 +395,17 @@ def main():
     if arguments.g:
         mode = 1
 
-    # check where the os installed steam
-    # ~/.steam/steam/skins               - common linux install location
-    # ~/.steam/skins                     - used on ubuntu and its derivatives
-    # C:\Program Files (x86)\Steam\skins - used on windows
-    oSys = checkOs()
+    # allow the user to enter a custom steam install location
+    if arguments.s:
+        oSys = arguments.s
+        print("Using custom steam path: " + arguments.s)
+    else:
+        # check where the os installed steam
+        # ~/.steam/steam/skins               - common linux install location
+        # ~/.steam/skins                     - used on ubuntu and its derivatives
+        # C:\Program Files (x86)\Steam\skins - used on windows
+        oSys = getOs()
+
 
     # check for the cache, the skin, and get them if needed
     checkInstall(oSys)
