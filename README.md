@@ -17,9 +17,13 @@ interesting features).
 
 ## Install
 
+**Note for Windows users:** You're going to need to install [python 3](https://www.python.org/) then [imagemagick](https://www.imagemagick.org/script/download.php) first. Then search for command prompt, right click it and open as administrator, then run the pip command below.
+
 ### Packages
 
-**Arch Linux AUR:** `python-wal-steam-git`
+**Python PIP:** `sudo pip install wal-steam`
+
+**Arch Linux AUR:** `pacaur -S python-wal-steam-git`
 
 ### Manual
 
@@ -39,7 +43,7 @@ If you cloned the repo all you need to do is run the script with python 3 from w
 
 Example:
 
-`python wal_steam.py -w`
+`wal-steam -w`
 
 ```
 Usage:
