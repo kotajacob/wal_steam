@@ -34,20 +34,20 @@ import json                               # writing and reading the config file
 from distutils.dir_util import copy_tree  # copytree from shutil is broken so use copy_tree
 
 # set some variables for the file locations
-HOME_DIR         = os.getenv("HOME", os.getenv("USERPROFILE")) # should be crossplatform
-CACHE_DIR        = os.path.join(HOME_DIR, ".cache", "wal_steam")
-CONFIG_DIR       = os.path.join(HOME_DIR, ".config", "wal_steam")
-SKIN_NAME        = "Metro 4.2.4 Wal_Mod"
-VERSION          = "Wal Steam 1.2.0"
-CONFIG_FILE      = "config.json"
-COLORS_FILE      = os.path.join(CACHE_DIR, "colors.styles")
-CONFIG_URL       = "https://raw.githubusercontent.com/kotajacob/wal_steam_config/master/config.json"
+HOME_DIR          = os.getenv("HOME", os.getenv("USERPROFILE")) # should be crossplatform
+CACHE_DIR         = os.path.join(HOME_DIR, ".cache", "wal_steam")
+CONFIG_DIR        = os.path.join(HOME_DIR, ".config", "wal_steam")
+SKIN_NAME         = "Metro 4.2.4 Wal_Mod"
+VERSION           = "Wal Steam 1.2.0"
+CONFIG_FILE       = "config.json"
+COLORS_FILE       = os.path.join(CACHE_DIR, "colors.styles")
+CONFIG_URL        = "https://raw.githubusercontent.com/kotajacob/wal_steam_config/master/config.json"
 
-STEAM_DIR_OTHER  = os.path.expanduser("~/.steam/steam/skins")
-STEAM_DIR_UBUNTU = os.path.expanduser("~/.steam/skins")
+STEAM_DIR_OTHER   = os.path.expanduser("~/.steam/steam/skins")
+STEAM_DIR_UBUNTU  = os.path.expanduser("~/.steam/skins")
 STEAM_DIR_WINDOWS = "C:\Program Files (x86)\Steam\skins"
-WAL_COLORS       = os.path.join(HOME_DIR, ".cache", "wal", "colors.css")
-WPG_COLORS       = os.path.join(HOME_DIR, ".wallpapers", "current.css")
+WAL_COLORS        = os.path.join(HOME_DIR, ".cache", "wal", "colors.css")
+WPG_COLORS        = os.path.join(HOME_DIR, ".wallpapers", "current.css")
 
 METRO_URL        = "http://metroforsteam.com/downloads/4.2.4.zip"
 METRO_ZIP        = os.path.join(CACHE_DIR, "metroZip.zip")
@@ -63,7 +63,7 @@ def tupToPrint(tup):
     tmp = ' '.join(map(str, tup)) # convert the tupple (rgb color) to a string ready to print
     return tmp
 
-def setColors(colors, config, oSys):
+def setColors(colors, config, steam_dir):
     print ("Patching new colors")
 
     # delete the old colors file if present in cache
@@ -140,15 +140,7 @@ def setColors(colors, config, oSys):
     f.close()
 
     # now copy it to the proper place based on the os
-    if (oSys == 0):
-        # linux other
-        shutil.copy(COLORS_FILE, os.path.join(STEAM_DIR_OTHER, SKIN_NAME))
-    elif (oSys == 1):
-        # linux ubuntu
-        shutil.copy(COLORS_FILE, os.path.join(STEAM_DIR_UBUNTU, SKIN_NAME))
-    else:
-        # windows
-        shutil.copy(COLORS_FILE, os.path.join(STEAM_DIR_WINDOWS, SKIN_NAME))
+    shutil.copy(COLORS_FILE, os.path.join(steam_dir, SKIN_NAME))
 
     # cleanup by removing generated color file
     os.remove(COLORS_FILE)
@@ -217,32 +209,14 @@ def getColors(mode):
 # checkInstall functions #
 ##########################
 
-def checkSkin(oSys):
+def checkSkin(steam_dir):
     # check if the skin is in the skin folder
-    if (oSys == 0):
-        # path is os other
-        if not os.path.isdir(os.path.join(STEAM_DIR_OTHER, SKIN_NAME)):
-            # skin was not found, copy it over
-            print("Installing skin")
-            copy_tree(METRO_PATCH_COPY, os.path.join(STEAM_DIR_OTHER, SKIN_NAME))
-        else:
-            print("Wal Steam skin found")
-    elif (oSys == 1):
-        # path is os ubuntu
-        if not os.path.isdir(os.path.join(STEAM_DIR_UBUNTU, SKIN_NAME)):
-            # skin was not found, copy it over
-            print("Installing skin")
-            copy_tree(METRO_PATCH_COPY, os.path.join(STEAM_DIR_UBUNTU, SKIN_NAME))
-        else:
-            print("Wal Steam skin found")
+    if not os.path.isdir(os.path.join(steam_dir, SKIN_NAME)):
+        # skin was not found, copy it over
+        print("Installing skin")
+        copy_tree(METRO_PATCH_COPY, os.path.join(steam_dir, SKIN_NAME))
     else:
-        # path is os windows
-        if not os.path.isdir(os.path.join(STEAM_DIR_WINDOWS, SKIN_NAME)):
-            # skin was not found, copy it over
-            print("Installing skin")
-            copy_tree(METRO_PATCH_COPY, os.path.join(STEAM_DIR_WINDOWS, SKIN_NAME))
-        else:
-            print("Wal Steam skin found")
+        print("Wal Steam skin found")
 
 def makeSkin():
     # download metro for steam and extract
@@ -356,13 +330,13 @@ def forceUpdate():
 def checkOs():
     # check if ~/.steam/steam/skins exists
     if os.path.isdir(STEAM_DIR_OTHER):
-        return 0
+        return STEAM_DIR_OTHER
     # check if ~/.steam/skins exists
     elif os.path.isdir(STEAM_DIR_UBUNTU):
-        return 1
+        return STEAM_DIR_UBUNTU
     # check if C:\Program Files (x86)\Steam\skins exists
     elif os.path.isdir(STEAM_DIR_WINDOWS):
-        return 2
+        return STEAM_DIR_WINDOWS
     # close with error message otherwise
     else:
         print("Error: Steam install not found!")
@@ -419,9 +393,9 @@ def main():
         mode = 1
 
     # check where the os installed steam
-    # 0 = ~/.steam/steam/skins               - common linux install location
-    # 1 = ~/.steam/skins                     - used on ubuntu and its derivatives
-    # 2 = C:\Program Files (x86)\Steam\skins - used on windows
+    # ~/.steam/steam/skins               - common linux install location
+    # ~/.steam/skins                     - used on ubuntu and its derivatives
+    # C:\Program Files (x86)\Steam\skins - used on windows
     oSys = checkOs()
 
     # check for the cache, the skin, and get them if needed
