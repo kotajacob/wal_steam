@@ -39,9 +39,9 @@ CACHE_DIR         = os.path.join(HOME_DIR, ".cache", "wal_steam")
 CONFIG_DIR        = os.path.join(HOME_DIR, ".config", "wal_steam")
 SKIN_NAME         = "Metro 4.2.4 Wal_Mod"
 VERSION           = "Wal Steam 1.2.0"
-CONFIG_FILE       = "config.json"
+CONFIG_FILE       = "wal_steam.conf"
 COLORS_FILE       = os.path.join(CACHE_DIR, "colors.styles")
-CONFIG_URL        = "https://raw.githubusercontent.com/kotajacob/wal_steam_config/master/config.json"
+CONFIG_URL        = "https://raw.githubusercontent.com/kotajacob/wal_steam_config/master/wal_steam.conf"
 
 STEAM_DIR_OTHER   = os.path.expanduser("~/.steam/steam/skins")
 STEAM_DIR_UBUNTU  = os.path.expanduser("~/.steam/skins")
@@ -63,7 +63,7 @@ def tupToPrint(tup):
     tmp = ' '.join(map(str, tup)) # convert the tupple (rgb color) to a string ready to print
     return tmp
 
-def setColors(colors, config, steam_dir):
+def setColors(colors, variables, walColors, alpha, steam_dir):
     print ("Patching new colors")
 
     # delete the old colors file if present in cache
@@ -127,11 +127,8 @@ def setColors(colors, config, steam_dir):
 
     # Now write the variables we will be changing
     ii = 0
-    for i in config:
-        # basically we need to write the steam variable and the color from the config dict
-        if (ii % 2 == 0):
-            alpha = "alpha_" + i
-            f.write('\t\t' + i + '=\"' + tupToPrint(colors[config[i]]) + ' ' + str(config[alpha])  +  '\"\n')
+    for i in variables:
+        f.write('\t\t' + i + '=\"' + tupToPrint(colors[int(walColors[ii])]) + ' ' + str(alpha[ii])  +  '\"\n')
         ii = ii + 1
 
     # Final formatting stuff
@@ -152,11 +149,48 @@ def setColors(colors, config, steam_dir):
 ###################
 # color functions #
 ###################
-
-def getConfig():
+def getConfigAlpha():
     # read the config file and return a dictionary of the variables and color variables
     f = open(os.path.join(CONFIG_DIR, CONFIG_FILE), 'r')
-    result = json.load(f)
+
+    # save the lines of the config file to rawFile
+    rawFile = f.readlines()
+
+    # loop through rawFile
+    result = []
+    for line in rawFile:
+        tmpResult = line[line.find(",")+1:line.find("\n")]
+        result.append(tmpResult)
+    f.close()
+    return result
+
+def getConfigColor():
+    # read the config file and return a dictionary of the variables and color variables
+    f = open(os.path.join(CONFIG_DIR, CONFIG_FILE), 'r')
+
+    # save the lines of the config file to rawFile
+    rawFile = f.readlines()
+
+    # loop through rawFile
+    result = []
+    for line in rawFile:
+        tmpResult = line[line.find("=")+1:line.find(",")]
+        result.append(tmpResult)
+    f.close()
+    return result
+
+def getConfigVar():
+    # read the config file and return a dictionary of the variables and color variables
+    f = open(os.path.join(CONFIG_DIR, CONFIG_FILE), 'r')
+
+    # save the lines of the config file to rawFile
+    rawFile = f.readlines()
+
+    # loop through rawFile
+    result = []
+    for line in rawFile:
+        tmpResult = line[:line.find("=")]
+        result.append(tmpResult)
     f.close()
     return result
 
@@ -246,16 +280,6 @@ def makeSkin():
     # finally apply the patch
     copy_tree(METRO_PATCH_COPY, METRO_COPY) # use copy_tree not copytree, shutil copytree is broken
 
-def genConfig():
-    # generate the config if it's missing
-    print("Generating config")
-    # obviously this is a huge block of code
-    f = open(os.path.join(CONFIG_DIR, CONFIG_FILE), 'w')
-    config = dict(black45=0, alpha_black45=120, Focus=4, alpha_Focus=255, Friends_InGame=1, alpha_Friends_InGame=255, Friends_Online=2, alpha_Friends_Online=255, FrameBorder=0, alpha_FrameBorder=255, GameList=0, alpha_GameList=255, Dividers=15, alpha_Dividers=255, Seperator=15, alpha_Seperator=255, OverlayBackground=0, alpha_OverlayBackground=80, OverlayPanels=0, alpha_OverlayPanels=120, OverlayClock=15, alpha_OverlayClock=120, OverlaySideButtons=1, alpha_OverlaySideButtons=120, OverlaySideButtons_h=4, alpha_OverlaySideButtons_h=120, TextEntry=0, alpha_TextEntry=255, Header_Dark=0, alpha_Header_Dark=255, ClientBG=0, alpha_ClientBG=255)
-    # write to json config
-    json.dump(config, f)
-    f.close()
-
 def makeConfig():
     # download the config for wal_steam
     print ("Downloading config file")
@@ -264,8 +288,8 @@ def makeConfig():
     except:
         # problem with download
         # generate the config instead
-        print("Error: downloading needed config file. Falling back to generation")
-        genConfig()
+        print("Error: downloading needed config file.")
+        sys.exit(1)
 
 def delConfig():
     # delete the config
@@ -417,10 +441,12 @@ def main():
     colors = hexToRgb(colors)
 
     # get a dictionary of the config settings from the config file
-    config = getConfig()
+    variables = getConfigVar()
+    walColors = getConfigColor()
+    alpha = getConfigAlpha()
 
     # finally create a temp colors.styles and copy it in updating the skin
-    setColors(colors, config, oSys)
+    setColors(colors, variables, walColors, alpha, oSys)
 
 if __name__ == '__main__':
     main()
