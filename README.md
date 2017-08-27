@@ -68,9 +68,3 @@ Options:
 ![3](https://ptpb.pw/zhFg.png)
 
 ![4](https://ptpb.pw/xOo1.png)
-
-![5](https://ptpb.pw/43pZ.png)
-
-![6](https://ptpb.pw/JRcw.png)
-
-![7](https://ptpb.pw/z4Kr.png)
