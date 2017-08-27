@@ -30,7 +30,6 @@ import urllib.request                     # downloading the zip files
 import zipfile                            # extracting the zip files
 import sys
 import argparse                           # argument parsing
-import json                               # writing and reading the config file
 from distutils.dir_util import copy_tree  # copytree from shutil is broken so use copy_tree
 
 # set some variables for the file locations
@@ -145,7 +144,7 @@ def setColors(colors, variables, walColors, alpha, steam_dir):
     print("If this is your first run you may have to ")
     print("enable Metro Wal Mod skin in steam then ")
     print("simply restart steam!")
-    
+
 ###################
 # color functions #
 ###################
