@@ -17,11 +17,11 @@ interesting features).
 
 ## Install
 
-**Note for Windows users:** You're going to need to install [python 3](https://www.python.org/) then [imagemagick](https://www.imagemagick.org/script/download.php) first. Then search for command prompt, right click it and open as administrator, then run the pip command below.
+**Note for Windows users:** You're going to need to install [python 3](https://www.python.org/) then [imagemagick](https://www.imagemagick.org/script/download.php) first. Then search for command prompt, right click it and open as administrator, then run the pip command below but without the sudo part.
 
 ### Packages
 
-**Python PIP:** `sudo pip install wal-steam`
+**Python PIP:** `sudo pip3 install wal-steam`
 
 **Arch Linux AUR:** `pacaur -S python-wal-steam-git`
 

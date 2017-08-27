@@ -7,8 +7,8 @@ except (ImportError):
     print("error: wal_steam requires Python 3.5 or greater.")
     quit(1)
 
-VERSION = "1.2.0"
-DOWNLOAD = "https://github.com/kotajacob/wal_steam/archive/1.2.0.tar.gz" 
+VERSION = wal_steam.VERSION
+DOWNLOAD = "https://github.com/kotajacob/wal_steam/archive/%s.tar.gz" % VERSION
 
 
 setuptools.setup(
