@@ -227,7 +227,7 @@ def checkSkin(steam_dir):
     if not os.path.isdir(os.path.join(steam_dir, SKIN_NAME)):
         # skin was not found, copy it over
         print("Installing skin")
-        copy_tree(METRO_PATCH_COPY, os.path.join(steam_dir, SKIN_NAME))
+        copy_tree(METRO_COPY, os.path.join(steam_dir, SKIN_NAME))
     else:
         print("Wal Steam skin found")
 
