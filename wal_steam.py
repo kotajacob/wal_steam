@@ -145,7 +145,7 @@ def setColors(colors, variables, walColors, alpha, steam_dir):
     print("If this is your first run you may have to ")
     print("enable Metro Wal Mod skin in steam then ")
     print("simply restart steam!")
-    
+
 ###################
 # color functions #
 ###################
@@ -195,16 +195,8 @@ def getConfigVar():
     return result
 
 def hexToRgb(hexColors):
-    # convert hex colors to rgb colors (takes a list)
-    tmpColors = []
-    rgbColors = []
-    for color in hexColors: # loop through the hex colors
-        # remove the optothorpe
-        # use tuple and a loop to convert them to rgb
-        # append new colors to our rgb list
-        tmp = color.lstrip('#')
-        tmpColors.append(tuple(int(tmp[i:i+2], 16) for i in (0, 2 ,4)))
-    return tmpColors
+    """Convert hex colors to rgb colors (takes a list)."""
+    return [tuple(bytes.fromhex(color.strip("#"))) for color in hexColors]
 
 def getColors(mode):
     if (mode == 0):
