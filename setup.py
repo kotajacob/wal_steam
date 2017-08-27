@@ -16,7 +16,7 @@ setuptools.setup(
     version=VERSION,
     author="Dakota Walsh",
     author_email="kotawalsh@gmail.com",
-    description="A little program that themes the colors for Metro for steam from walor wpg. Now with windows support!",
+    description="A little program that themes the colors for Metro for steam from wal or wpg. Now with windows support!",
     license="MIT",
     url="https://github.com/kotajacob/wal_steam",
     download_url=DOWNLOAD,
