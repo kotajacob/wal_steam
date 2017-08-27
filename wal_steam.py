@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+"""
+Wal Steam
 
 #----------------------------------#
 # ,--. ,--.         ,--.           #
@@ -9,20 +11,6 @@
 #            kotajacob.tk          #
 # Copyright (C) 2017  Dakota Walsh #
 #----------------------------------#
-
-"""
-Wal Steam
-
-Usage:
-  wal_steam.py (-w | -g)
-  wal_steam.py (-h | --help)
-  wal_steam.py (-v | --version)
-
-Options:
-  -w                   use wal for colors
-  -g                   use wpg for colors
-  -h --help            show this help message and exit
-  -v --version         show version and exit
 """
 import shutil                             # copying files
 import os                                 # getting paths
@@ -38,7 +26,7 @@ HOME_DIR          = os.getenv("HOME", os.getenv("USERPROFILE")) # should be cros
 CACHE_DIR         = os.path.join(HOME_DIR, ".cache", "wal_steam")
 CONFIG_DIR        = os.path.join(HOME_DIR, ".config", "wal_steam")
 SKIN_NAME         = "Metro 4.2.4 Wal_Mod"
-VERSION           = "Wal Steam 1.2.0"
+VERSION           = "1.2.0"
 CONFIG_FILE       = "wal_steam.conf"
 COLORS_FILE       = os.path.join(CACHE_DIR, "colors.styles")
 CONFIG_URL        = "https://raw.githubusercontent.com/kotajacob/wal_steam_config/master/wal_steam.conf"
@@ -145,7 +133,7 @@ def setColors(colors, variables, walColors, alpha, steam_dir):
     print("If this is your first run you may have to ")
     print("enable Metro Wal Mod skin in steam then ")
     print("simply restart steam!")
-    
+
 ###################
 # color functions #
 ###################
@@ -397,8 +385,8 @@ def main():
     # parse the arguments
     arguments = getArgs()
     if arguments.version:
-        print(VERSION)
-        sys.exit()
+        print("Wal Steam", VERSION)
+        sys.exit(1)
 
     # update the cache and config then exit
     if arguments.u:
