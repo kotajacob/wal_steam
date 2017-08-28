@@ -1,6 +1,6 @@
 # `wal_steam`
 
-A little program that themes the colors for Metro for steam from `wal`or `wpg`. Now with windows support!
+A little program that themes the colors for Metro for steam from `wal`or `wpg`. Now with HiDPI support!
 
 ![1](https://ptpb.pw/l9Rw.png)
 
@@ -47,7 +47,7 @@ Example:
 
 ```
 Usage:
-  wal_steam.py (-w | -g)
+  wal_steam.py (-w | -g | -u) [-d]
   wal_steam.py ( -s ) ["/home/kota/bin/custom_steam_install/skins/"]
   wal_steam.py (-h | --help)
   wal_steam.py (-v | --version)
@@ -58,6 +58,7 @@ Options:
   -w                   use wal for colors
   -g                   use wpg for colors
   -u                   force update cache and config file
+  -d                   apply HiDPI community patch
   -s "/steam/skins"    specify a custom steam skins folder to use
 ```
 
