@@ -45,6 +45,7 @@ METRO_PATCH_URL  = "https://github.com/redsigma/UPMetroSkin/archive/196feafc14de
 METRO_PATCH_ZIP  = os.path.join(CACHE_DIR, "metroPatchZip.zip")
 METRO_PATCH_DIR  = os.path.join(CACHE_DIR, "metroPatchZip")
 METRO_PATCH_COPY = os.path.join(METRO_PATCH_DIR, "UPMetroSkin-196feafc14deae103355b4fee1ecc4cda9288c7f", "Unofficial 4.2.4 Patch", "Main Files [Install First]")
+METRO_PATCH_HDPI = os.path.join(METRO_PATCH_DIR, "UPMetroSkin-196feafc14deae103355b4fee1ecc4cda9288c7f", "Unofficial 4.2.4 Patch", "Extras", "High DPI", "Increased fonts", "Install")
 
 def tupToPrint(tup):
     tmp = ' '.join(map(str, tup)) # convert the tupple (rgb color) to a string ready to print
@@ -360,10 +361,13 @@ def getArgs():
             help="Get colors from wpg.")
 
     arg.add_argument("-s",
-            help="Enter a custom steam skin directory")
+            help="Enter a custom steam skin directory.")
+
+    arg.add_argument("-d", action="store_true",
+            help="Apply high dpi patches.")
 
     arg.add_argument("-u", action="store_true",
-            help="Force update cache and config file, WARNING WILL OVERWRITE config.json")
+            help="Force update cache, skin, and config file, WARNING WILL OVERWRITE config.json")
 
     return arg.parse_args()
 
@@ -385,6 +389,7 @@ def main():
         # first remove the cache and config
         forceUpdate()
         print("Cache and config updated")
+        print("Run with -w or -g to apply and re-enable wal_steam")
         sys.exit()
 
     # make sure they didn't select both wal and wpg
@@ -397,6 +402,12 @@ def main():
         mode = 0
     if arguments.g:
         mode = 1
+
+    # check if user wants high-dpi support
+    if arguments.d:
+        dpi = 1
+    if not arguments.d:
+        dpi = 0
 
     # allow the user to enter a custom steam install location
     if arguments.s:
