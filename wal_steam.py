@@ -223,7 +223,7 @@ def getColors(mode):
 # checkInstall functions #
 ##########################
 
-def checkSkin(steam_dir):
+def checkSkin(steam_dir, dpi):
     # check if the skin is in the skin folder
     if not os.path.isdir(os.path.join(steam_dir, SKIN_NAME)):
         # skin was not found, copy it over
@@ -231,6 +231,10 @@ def checkSkin(steam_dir):
         copy_tree(METRO_COPY, os.path.join(steam_dir, SKIN_NAME))
     else:
         print("Wal Steam skin found")
+        if (dpi==1):
+            # skin was not found, copy it over
+            print("Forcing skin install for High DPI patches")
+            copy_tree(METRO_COPY, os.path.join(steam_dir, SKIN_NAME))
 
 def makeSkin():
     # download metro for steam and extract
@@ -271,6 +275,11 @@ def makeConfig():
         print("Error: downloading needed config file.")
         sys.exit(1)
 
+def makeDpi():
+    # apply the high dpi
+    print ("Applying the high dpi patches")
+    copy_tree(METRO_PATCH_HDPI, METRO_COPY)
+
 def delConfig():
     # delete the config
     if os.path.isdir(CONFIG_DIR):
@@ -280,6 +289,11 @@ def delCache():
     # delete the cache
     if os.path.isdir(CACHE_DIR):
         shutil.rmtree(CACHE_DIR)
+
+def delSkin(steam_dir):
+    # delete the skin
+    if os.path.isdir(os.path.join(steam_dir, SKIN_NAME)):
+        shutil.rmtree(os.path.join(steam_dir, SKIN_NAME))
 
 def checkConfig():
     # check for the config
@@ -299,7 +313,7 @@ def checkConfig():
         # config file found!
         print("Wal Steam config found")
 
-def checkCache():
+def checkCache(dpi):
     # check for the cache
     if not os.path.isdir(os.path.join(HOME_DIR, ".cache")):
         # make the .cache folder
@@ -310,25 +324,34 @@ def checkCache():
 
         # download, extract, and patch metro for steam
         makeSkin()
+
+        # apply the dpi patches
+        if (dpi==1):
+            makeDpi()
     else:
         # cache folder exists
         print("Wal Steam cache found")
 
-def checkInstall(oSys):
+        # apply the dpi patches
+        if (dpi==1):
+            makeDpi()
+
+def checkInstall(oSys, dpi):
     # check if the cache exists, make it if not
-    checkCache()
+    checkCache(dpi)
 
     # check if the config file exists
     checkConfig()
 
     # check if the skin is installed, install it if not
-    checkSkin(oSys)
+    checkSkin(oSys, dpi)
 
-def forceUpdate():
+def forceUpdate(oSys, dpi):
     # force update the cache and config files
     delConfig()
     delCache()
-    checkCache()
+    delSkin(oSys)
+    checkCache(dpi)
     checkConfig()
 
 def getOs():
@@ -383,15 +406,6 @@ def main():
         print("Wal Steam", VERSION)
         sys.exit(1)
 
-    # update the cache and config then exit
-    if arguments.u:
-        print("Force updating cache and config")
-        # first remove the cache and config
-        forceUpdate()
-        print("Cache and config updated")
-        print("Run with -w or -g to apply and re-enable wal_steam")
-        sys.exit()
-
     # make sure they didn't select both wal and wpg
     if arguments.w and arguments.g:
         print("Error: You must select wpg or wal")
@@ -412,7 +426,7 @@ def main():
     # allow the user to enter a custom steam install location
     if arguments.s:
         oSys = arguments.s
-        print("Using custom steam path: " + arguments.s)
+        print("Using custom skin path: " + arguments.s)
     else:
         # check where the os installed steam
         # ~/.steam/steam/skins               - common linux install location
@@ -420,9 +434,17 @@ def main():
         # C:\Program Files (x86)\Steam\skins - used on windows
         oSys = getOs()
 
+    # update the cache and config then exit
+    if arguments.u:
+        print("Force updating cache and config")
+        # first remove the cache and config
+        forceUpdate(oSys, dpi)
+        print("Cache and config updated")
+        print("Run with -w or -g to apply and re-enable wal_steam")
+        sys.exit()
 
     # check for the cache, the skin, and get them if needed
-    checkInstall(oSys)
+    checkInstall(oSys, dpi)
 
     # get a list from either wal or wpg based on the mode
     colors = getColors(mode)
