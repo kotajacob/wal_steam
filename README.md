@@ -23,7 +23,7 @@ interesting features).
 
 **Python PIP:** `sudo pip3 install wal-steam`
 
-**Arch Linux AUR:** `pacaur -S python-wal-steam-git` (currently outdated)
+**Arch Linux AUR:** `pacaur -S python-wal-steam-git`
 
 ### Manual
 
