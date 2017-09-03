@@ -2,15 +2,16 @@
 """
 Wal Steam
 
-#----------------------------------#
-# ,--. ,--.         ,--.           #
-# |  .'   / ,---. ,-'  '-. ,--,--. #
-# |  .   ' | .-. |'-.  .-'' ,-.  | #
-# |  |\   \' '-' '  |  |  \ '-'  | #
-# `--' '--' `---'   `--'   `--`--' #
-#            kotajacob.tk          #
-# Copyright (C) 2017  Dakota Walsh #
-#----------------------------------#
+========================================
+oooo    oooo               .            
+`888   .8P'              .o8            
+ 888  d8'     .ooooo.  .o888oo  .oooo.  
+ 88888[      d88' `88b   888   `P  )88b 
+ 888`88b.    888   888   888    .oP"888 
+ 888  `88b.  888   888   888 . d8(  888 
+o888o  o888o `Y8bod8P'   "888" `Y888""8o
+               @nilsu.org               
+=== Copyright (C) 2017  Dakota Walsh ===
 """
 import shutil                             # copying files
 import os                                 # getting paths
@@ -404,7 +405,7 @@ def main():
     arguments = getArgs()
     if arguments.version:
         print("Wal Steam", VERSION)
-        sys.exit(1)
+        sys.exit()
 
     # make sure they didn't select both wal and wpg
     if arguments.w and arguments.g:
