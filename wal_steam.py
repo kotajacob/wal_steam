@@ -32,7 +32,7 @@ COLORS_FILE       = os.path.join(CACHE_DIR, "colors.styles")
 CONFIG_URL        = "https://raw.githubusercontent.com/kotajacob/wal_steam_config/master/wal_steam.conf"
 
 STEAM_DIR_OTHER   = os.path.expanduser("~/.steam/steam/skins")
-STEAM_DIR_OSX   = "/Applications/Steam.app/Contents/MacOS/skins"
+STEAM_DIR_OSX     = os.path.expanduser("~/Library/Application Support/Steam/Steam.AppBundle/Steam/Contents/MacOS/skins")
 STEAM_DIR_UBUNTU  = os.path.expanduser("~/.steam/skins")
 STEAM_DIR_WINDOWS = "C:\Program Files (x86)\Steam\skins"
 WAL_COLORS        = os.path.join(HOME_DIR, ".cache", "wal", "colors.css")
