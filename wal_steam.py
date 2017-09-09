@@ -3,14 +3,14 @@
 Wal Steam
 
 ========================================
-oooo    oooo               .            
-`888   .8P'              .o8            
- 888  d8'     .ooooo.  .o888oo  .oooo.  
- 88888[      d88' `88b   888   `P  )88b 
- 888`88b.    888   888   888    .oP"888 
- 888  `88b.  888   888   888 . d8(  888 
+oooo    oooo               .
+`888   .8P'              .o8
+ 888  d8'     .ooooo.  .o888oo  .oooo.
+ 88888[      d88' `88b   888   `P  )88b
+ 888`88b.    888   888   888    .oP"888
+ 888  `88b.  888   888   888 . d8(  888
 o888o  o888o `Y8bod8P'   "888" `Y888""8o
-               @nilsu.org               
+               @nilsu.org
 === Copyright (C) 2017  Dakota Walsh ===
 """
 import shutil                             # copying files
@@ -32,6 +32,7 @@ COLORS_FILE       = os.path.join(CACHE_DIR, "colors.styles")
 CONFIG_URL        = "https://raw.githubusercontent.com/kotajacob/wal_steam_config/master/wal_steam.conf"
 
 STEAM_DIR_OTHER   = os.path.expanduser("~/.steam/steam/skins")
+STEAM_DIR_OSX   = "/Applications/Steam.app/Contents/MacOS/skins"
 STEAM_DIR_UBUNTU  = os.path.expanduser("~/.steam/skins")
 STEAM_DIR_WINDOWS = "C:\Program Files (x86)\Steam\skins"
 WAL_COLORS        = os.path.join(HOME_DIR, ".cache", "wal", "colors.css")
@@ -365,6 +366,8 @@ def getOs():
     # check if C:\Program Files (x86)\Steam\skins exists
     elif os.path.isdir(STEAM_DIR_WINDOWS):
         return STEAM_DIR_WINDOWS
+    elif os.path.isdir(STEAM_DIR_OSX):
+        return STEAM_DIR_OSX
     # close with error message otherwise
     else:
         print("Error: Steam install not found!")
