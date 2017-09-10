@@ -37,7 +37,7 @@ interesting features).
 
 **Make sure you've run wal or wpgk at least once to generate the colors and set the wallpaper.**
 
-**Note:** On some distros, notably **Ubuntu** you'll have to run the command python3 instead of python or you'll have an error about failing to import urllib.request. Additionally, OSx users may   need to use the system certificate store (outlined [here] (https://stackoverflow.com/questions/      41691327/ssl-sslerror-ssl-certificate-verify-failed-certificate-verify-failed-ssl-c)).
+**Note:** On some distros, notably **Ubuntu** you'll have to run the command python3 instead of python or you'll have an error about failing to import urllib.request. Additionally, OSx users may   need to use the system certificate store (outlined [here](https://stackoverflow.com/questions/41691327/ssl-sslerror-ssl-certificate-verify-failed-certificate-verify-failed-ssl-c)).
 
 If you cloned the repo all you need to do is run the script with python 3 from wherever you downloaded it.
 
