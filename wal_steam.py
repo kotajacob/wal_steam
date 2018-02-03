@@ -43,7 +43,7 @@ METRO_ZIP        = os.path.join(CACHE_DIR, "metroZip.zip")
 METRO_DIR        = os.path.join(CACHE_DIR, "metroZip")
 METRO_COPY       = os.path.join(METRO_DIR, "Metro 4.2.4")
 
-METRO_PATCH_URL  = "https://github.com/redsigma/UPMetroSkin/archive/196feafc14deae103355b4fee1ecc4cda9288c7f.zip" # A link to the version we've tested rather than the latest, just in case they break things upstream.
+METRO_PATCH_URL  = "https://codeload.github.com/redsigma/UPMetroSkin/zip/196feafc14deae103355b4fee1ecc4cda9288c7f" # A link to the version we've tested rather than the latest, just in case they break things upstream.
 METRO_PATCH_ZIP  = os.path.join(CACHE_DIR, "metroPatchZip.zip")
 METRO_PATCH_DIR  = os.path.join(CACHE_DIR, "metroPatchZip")
 METRO_PATCH_COPY = os.path.join(METRO_PATCH_DIR, "UPMetroSkin-196feafc14deae103355b4fee1ecc4cda9288c7f", "Unofficial 4.2.4 Patch", "Main Files [Install First]")
@@ -242,6 +242,9 @@ def makeSkin():
     # download metro for steam and extract
     print("Downloading Metro for steam")
     try:
+        opener = urllib.request.build_opener()
+        opener.addheaders = [{'User-Agent', 'Mozilla/5.0'}]
+        urllib.request.install_opener(opener)
         urllib.request.urlretrieve(METRO_URL, METRO_ZIP)
     except:
         print("Error: downloading needed skin file. Check your connection and try again.")
@@ -252,11 +255,11 @@ def makeSkin():
     z.close()
 
     # download metro for steam patch and extract
-    print("Downloading Metro patch")
+    print("Downloading Metro patch")    
     try:
         urllib.request.urlretrieve(METRO_PATCH_URL, METRO_PATCH_ZIP)
     except:
-        print("Error: downloading needed skin file. Check your connection and try again.")
+        print("Error: downloading needed patch file. Check your connection and try again.")
         sys.exit(1)
 
     z = zipfile.ZipFile(METRO_PATCH_ZIP, 'r')
