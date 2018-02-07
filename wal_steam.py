@@ -226,9 +226,13 @@ def getColors(mode):
 ##########################
 
 def checkSkin(steam_dir, dpi):
-    # check if the skin is in the skin folder
+    # check for skin and patch in cache
+    if not (os.path.isdir(METRO_COPY) and os.path.isdir(METRO_PATCH_COPY)):
+        # metro skin and patch not found in cache, download and make
+        makeSkin()
+    # check for patched skin in steam skin directory
     if not os.path.isdir(os.path.join(steam_dir, SKIN_NAME)):
-        # skin was not found, copy it over
+        # patched skin not found in steam, copy it over
         print("Installing skin")
         copy_tree(METRO_COPY, os.path.join(steam_dir, SKIN_NAME))
     else:
@@ -255,7 +259,7 @@ def makeSkin():
     z.close()
 
     # download metro for steam patch and extract
-    print("Downloading Metro patch")    
+    print("Downloading Metro patch")
     try:
         urllib.request.urlretrieve(METRO_PATCH_URL, METRO_PATCH_ZIP)
     except:
