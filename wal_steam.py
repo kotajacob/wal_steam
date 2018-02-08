@@ -26,7 +26,7 @@ HOME_DIR          = os.getenv("HOME", os.getenv("USERPROFILE")) # should be cros
 CACHE_DIR         = os.path.join(HOME_DIR, ".cache", "wal_steam")
 CONFIG_DIR        = os.path.join(HOME_DIR, ".config", "wal_steam")
 SKIN_NAME         = "Metro 4.2.4 Wal_Mod"
-VERSION           = "1.2.4"
+VERSION           = "1.2.5"
 CONFIG_FILE       = "wal_steam.conf"
 COLORS_FILE       = os.path.join(CACHE_DIR, "colors.styles")
 CONFIG_URL        = "https://raw.githubusercontent.com/kotajacob/wal_steam_config/master/wal_steam.conf"
@@ -226,9 +226,13 @@ def getColors(mode):
 ##########################
 
 def checkSkin(steam_dir, dpi):
-    # check if the skin is in the skin folder
+    # check for skin and patch in cache
+    if not (os.path.isdir(METRO_COPY) and os.path.isdir(METRO_PATCH_COPY)):
+        # metro skin and patch not found in cache, download and make
+        makeSkin()
+    # check for patched skin in steam skin directory
     if not os.path.isdir(os.path.join(steam_dir, SKIN_NAME)):
-        # skin was not found, copy it over
+        # patched skin not found in steam, copy it over
         print("Installing skin")
         copy_tree(METRO_COPY, os.path.join(steam_dir, SKIN_NAME))
     else:
@@ -255,7 +259,7 @@ def makeSkin():
     z.close()
 
     # download metro for steam patch and extract
-    print("Downloading Metro patch")    
+    print("Downloading Metro patch")
     try:
         opener = urllib.request.build_opener()
         opener.addheaders = [{'User-Agent', 'Mozilla/5.0'}]
