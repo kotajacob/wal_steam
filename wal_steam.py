@@ -11,7 +11,7 @@ oooo    oooo               .
  888  `88b.  888   888   888 . d8(  888
 o888o  o888o `Y8bod8P'   "888" `Y888""8o
                @nilsu.org
-=== Copyright (C) 2017  Dakota Walsh ===
+=== Copyright (C) 2018  Dakota Walsh ===
 """
 import shutil                             # copying files
 import os                                 # getting paths
