@@ -25,8 +25,8 @@ from distutils.dir_util import copy_tree  # copytree from shutil is broken so us
 HOME_DIR          = os.getenv("HOME", os.getenv("USERPROFILE")) # should be crossplatform
 CACHE_DIR         = os.path.join(HOME_DIR, ".cache", "wal_steam")
 CONFIG_DIR        = os.path.join(HOME_DIR, ".config", "wal_steam")
-SKIN_NAME         = "Metro 4.2.4 Wal_Mod"
-VERSION           = "1.2.5"
+SKIN_NAME         = "Metro 4.3.1 Wal_Mod"
+VERSION           = "1.3.0"
 CONFIG_FILE       = "wal_steam.conf"
 COLORS_FILE       = os.path.join(CACHE_DIR, "colors.styles")
 CONFIG_URL        = "https://raw.githubusercontent.com/kotajacob/wal_steam_config/master/wal_steam.conf"
@@ -38,16 +38,16 @@ STEAM_DIR_WINDOWS = "C:\Program Files (x86)\Steam\skins"
 WAL_COLORS        = os.path.join(HOME_DIR, ".cache", "wal", "colors.css")
 WPG_COLORS        = os.path.join(HOME_DIR, ".config", "wpg", "current.css")
 
-METRO_URL        = "http://metroforsteam.com/downloads/4.2.4.zip"
+METRO_URL        = "http://metroforsteam.com/downloads/4.3.1.zip"
 METRO_ZIP        = os.path.join(CACHE_DIR, "metroZip.zip")
 METRO_DIR        = os.path.join(CACHE_DIR, "metroZip")
-METRO_COPY       = os.path.join(METRO_DIR, "Metro 4.2.4")
+METRO_COPY       = os.path.join(METRO_DIR, "Metro 4.3.1")
 
-METRO_PATCH_URL  = "https://codeload.github.com/redsigma/UPMetroSkin/zip/196feafc14deae103355b4fee1ecc4cda9288c7f" # A link to the version we've tested rather than the latest, just in case they break things upstream.
+METRO_PATCH_URL  = "https://github.com/redsigma/UPMetroSkin/archive/e43f55b43f8ae565e162da664887051a1c76c5b4.zip" # A link to the version we've tested rather than the latest, just in case they break things upstream.
 METRO_PATCH_ZIP  = os.path.join(CACHE_DIR, "metroPatchZip.zip")
 METRO_PATCH_DIR  = os.path.join(CACHE_DIR, "metroPatchZip")
-METRO_PATCH_COPY = os.path.join(METRO_PATCH_DIR, "UPMetroSkin-196feafc14deae103355b4fee1ecc4cda9288c7f", "Unofficial 4.2.4 Patch", "Main Files [Install First]")
-METRO_PATCH_HDPI = os.path.join(METRO_PATCH_DIR, "UPMetroSkin-196feafc14deae103355b4fee1ecc4cda9288c7f", "Unofficial 4.2.4 Patch", "Extras", "High DPI", "Increased fonts", "Install")
+METRO_PATCH_COPY = os.path.join(METRO_PATCH_DIR, "UPMetroSkin-e43f55b43f8ae565e162da664887051a1c76c5b4", "Unofficial 4.3.1 Patch", "Main Files [Install First]")
+METRO_PATCH_HDPI = os.path.join(METRO_PATCH_DIR, "UPMetroSkin-e43f55b43f8ae565e162da664887051a1c76c5b4", "Unofficial 4.3.1 Patch", "Extras", "High DPI", "Increased fonts", "Install")
 
 def tupToPrint(tup):
     tmp = ' '.join(map(str, tup)) # convert the tupple (rgb color) to a string ready to print
