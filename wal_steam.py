@@ -41,7 +41,6 @@ WPG_COLORS        = os.path.join(HOME_DIR, ".config", "wpg", "current.css")
 METRO_URL        = "http://metroforsteam.com/downloads/4.3.1.zip"
 METRO_ZIP        = os.path.join(CACHE_DIR, "metroZip.zip")
 METRO_DIR        = os.path.join(CACHE_DIR, "metroZip")
-METRO_COPY       = os.path.join(METRO_DIR, "Metro 4.3.1")
 
 METRO_PATCH_URL  = "https://github.com/redsigma/UPMetroSkin/archive/e43f55b43f8ae565e162da664887051a1c76c5b4.zip" # A link to the version we've tested rather than the latest, just in case they break things upstream.
 METRO_PATCH_ZIP  = os.path.join(CACHE_DIR, "metroPatchZip.zip")
@@ -227,20 +226,20 @@ def getColors(mode):
 
 def checkSkin(steam_dir, dpi):
     # check for skin and patch in cache
-    if not (os.path.isdir(METRO_COPY) and os.path.isdir(METRO_PATCH_COPY)):
+    if not (os.path.isdir(METRO_DIR) and os.path.isdir(METRO_PATCH_COPY)):
         # metro skin and patch not found in cache, download and make
         makeSkin()
     # check for patched skin in steam skin directory
     if not os.path.isdir(os.path.join(steam_dir, SKIN_NAME)):
         # patched skin not found in steam, copy it over
         print("Installing skin")
-        copy_tree(METRO_COPY, os.path.join(steam_dir, SKIN_NAME))
+        copy_tree(METRO_DIR, os.path.join(steam_dir, SKIN_NAME))
     else:
         print("Wal Steam skin found")
         if (dpi==1):
             # skin was not found, copy it over
             print("Forcing skin install for High DPI patches")
-            copy_tree(METRO_COPY, os.path.join(steam_dir, SKIN_NAME))
+            copy_tree(METRO_DIR, os.path.join(steam_dir, SKIN_NAME))
 
 def makeSkin():
     # download metro for steam and extract
@@ -274,7 +273,7 @@ def makeSkin():
     z.close()
 
     # finally apply the patch
-    copy_tree(METRO_PATCH_COPY, METRO_COPY) # use copy_tree not copytree, shutil copytree is broken
+    copy_tree(METRO_PATCH_COPY, METRO_DIR) # use copy_tree not copytree, shutil copytree is broken
 
 def makeConfig():
     # download the config for wal_steam
@@ -290,7 +289,7 @@ def makeConfig():
 def makeDpi():
     # apply the high dpi
     print ("Applying the high dpi patches")
-    copy_tree(METRO_PATCH_HDPI, METRO_COPY)
+    copy_tree(METRO_PATCH_HDPI, METRO_DIR)
 
 def delConfig():
     # delete the config
