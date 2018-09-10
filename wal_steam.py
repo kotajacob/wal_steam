@@ -74,7 +74,7 @@ def setColors(colors, variables, walColors, alpha, steam_dir):
 
     wal_styles = "\n".join(patches)
     custom_styles = custom_styles.replace(
-        "light=\"Helvetica Neue Thin\" [$OSX]\n}", "light=\"Helvetica Neue Thin\" [$OSX]\n" + wal_styles + "}")
+        "}\n\nstyles{", wal_styles + "}\n\nstyles{")
 
     f = open(COLORS_FILE, "w")
     f.write(custom_styles)
