@@ -369,7 +369,7 @@ def getOs():
 def parseFontArgs(rawArgs):
     splitArgs = [arg.strip() for arg in rawArgs.split(",")]
 
-    if len(splitArgs) < 4:
+    if len(splitArgs) != 4:
         print("Error: You must specify all four custom font styles.")
         sys.exit(1)
 
