@@ -49,11 +49,15 @@ METRO_PATCH_DIR  = os.path.join(CACHE_DIR, "metroPatchZip")
 METRO_PATCH_COPY = os.path.join(METRO_PATCH_DIR, "UPMetroSkin-e43f55b43f8ae565e162da664887051a1c76c5b4", "Unofficial 4.3.1 Patch", "Main Files [Install First]")
 METRO_PATCH_HDPI = os.path.join(METRO_PATCH_DIR, "UPMetroSkin-e43f55b43f8ae565e162da664887051a1c76c5b4", "Unofficial 4.3.1 Patch", "Extras", "High DPI", "Increased fonts", "Install")
 
+# default Metro fonts
+LINUX_FONT = "Segoe UI"
+OSX_FONT = "Helvetica Neue"
+
 def tupToPrint(tup):
     tmp = ' '.join(map(str, tup)) # convert the tupple (rgb color) to a string ready to print
     return tmp
 
-def setColors(colors, variables, walColors, alpha, steam_dir):
+def setCustomStyles(colors, variables, walColors, alpha, steam_dir, custom_font = ""):
     print ("Patching new colors")
 
     # delete the old colors file if present in cache
@@ -76,6 +80,9 @@ def setColors(colors, variables, walColors, alpha, steam_dir):
     custom_styles = custom_styles.replace(
         "}\n\nstyles{", wal_styles + "}\n\nstyles{")
 
+    if custom_font:
+        custom_styles = replaceFonts(custom_styles, custom_font)
+
     f = open(COLORS_FILE, "w")
     f.write(custom_styles)
     f.close()
@@ -89,6 +96,17 @@ def setColors(colors, variables, walColors, alpha, steam_dir):
     print("If this is your first run you may have to ")
     print("enable Metro Wal Mod skin in steam then ")
     print("simply restart steam!")
+
+
+def replaceFonts(styles, font):
+    print("Patching custom font")
+
+    replacements = {LINUX_FONT: font, OSX_FONT: font}
+
+    for old, new in replacements.items():
+        styles = styles.replace(old, new)
+
+    return styles
 
 ###################
 # color functions #
@@ -354,6 +372,9 @@ def getArgs():
     arg.add_argument("-s",
             help="Enter a custom steam skin directory.")
 
+    arg.add_argument("-f", "--font",
+            help="Enter a custom font. WARNING: Make sure the font is installed on your system.")
+
     arg.add_argument("-d", action="store_true",
             help="Apply high dpi patches.")
 
@@ -402,6 +423,13 @@ def main():
         # C:\Program Files (x86)\Steam\skins - used on windows
         oSys = getOs()
 
+    # allow the user to enter a custom font
+    if arguments.font:
+        font = arguments.font
+        print("Using custom font: " + arguments.font)
+    else:
+        font = ""
+
     # update the cache and config then exit
     if arguments.u:
         print("Force updating cache and config")
@@ -426,7 +454,7 @@ def main():
     alpha = getConfigAlpha()
 
     # finally create a temp colors.styles and copy it in updating the skin
-    setColors(colors, variables, walColors, alpha, oSys)
+    setCustomStyles(colors, variables, walColors, alpha, oSys, font)
 
 if __name__ == '__main__':
     main()
