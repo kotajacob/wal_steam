@@ -20,6 +20,7 @@ import zipfile                            # extracting the zip files
 import sys
 import argparse                           # argument parsing
 import textwrap
+import re
 from distutils.dir_util import copy_tree  # copytree from shutil is broken so use copy_tree
 from argparse import RawTextHelpFormatter
 
@@ -50,22 +51,6 @@ METRO_PATCH_ZIP  = os.path.join(CACHE_DIR, "metroPatchZip.zip")
 METRO_PATCH_DIR  = os.path.join(CACHE_DIR, "metroPatchZip")
 METRO_PATCH_COPY = os.path.join(METRO_PATCH_DIR, "UPMetroSkin-e43f55b43f8ae565e162da664887051a1c76c5b4", "Unofficial 4.3.1 Patch", "Main Files [Install First]")
 METRO_PATCH_HDPI = os.path.join(METRO_PATCH_DIR, "UPMetroSkin-e43f55b43f8ae565e162da664887051a1c76c5b4", "Unofficial 4.3.1 Patch", "Extras", "High DPI", "Increased fonts", "Install")
-
-# default Metro fonts
-METRO_FONTS = {
-    "default": {
-        "basefont" : "Segoe UI",
-        "semibold" : "Segoe UI Semibold",
-        "semilight": "Segoe UI Semilight",
-        "light"    : "Segoe UI Light"
-    },
-    "osx": {
-        "basefont" : "Helvetica Neue",
-        "semibold" : "Helvetica Neue Medium",
-        "semilight": "Helvetica Neue Light",
-        "light"    : "Helvetica Neue Thin"
-    }
-}
 
 # CLI colour and style sequences
 CLI_RED    = "\033[91m"
@@ -121,13 +106,16 @@ def setCustomStyles(colors, variables, walColors, alpha, steam_dir, fonts = []):
 def replaceFonts(styles, fonts):
     print("Patching custom fonts")
 
-    replacements = {
-        METRO_FONTS["default"]["basefont"]: fonts[0],
-        METRO_FONTS["osx"]["basefont"]: fonts[0]
+    # attempt to replace font styles with regular expressions
+    matches = {
+        "^basefont=\"(.+?)\"": "basefont=\"" + fonts[0] + "\"",
+        "^semibold=\"(.+?)\"": "semibold=\"" + fonts[1] + "\"",
+        "^semilight=\"(.+?)\"": "semilight=\"" + fonts[2] + "\"",
+        "^light=\"(.+?)\"": "light=\"" + fonts[3] + "\"",
     }
 
-    for old, new in replacements.items():
-        styles = styles.replace(old, new)
+    for pattern, replacement in matches.items():
+        styles = re.sub(pattern, replacement, styles, 0, re.M)
 
     return styles
 
@@ -378,8 +366,8 @@ def getOs():
         print("Error: Steam install not found!")
         sys.exit(1)
 
-def parseCustomFonts(rawArgs):
-    splitArgs = rawArgs.split(",")
+def parseFontArgs(rawArgs):
+    splitArgs = [arg.strip() for arg in rawArgs.split(",")]
 
     if len(splitArgs) < 4:
         print("Error: You must specify all four custom font styles.")
@@ -461,7 +449,7 @@ def main():
 
     # allow the user to enter custom font styles
     if arguments.fonts:
-        fonts = parseCustomFonts(arguments.fonts)
+        fonts = parseFontArgs(arguments.fonts)
         print("Using custom font styles: " + arguments.fonts)
     else:
         fonts = ""
