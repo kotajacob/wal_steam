@@ -7,3 +7,7 @@
 # Ignore Python pyc files
 *.pyc
 
+# Add PyPi files
+build/
+dist/
+wal_steam.egg-info/
