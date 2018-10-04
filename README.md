@@ -51,6 +51,7 @@ Usage:
   wal_steam.py ( -s ) ["/home/kota/bin/custom_steam_install/skins/"]
   wal_steam.py (-h | --help)
   wal_steam.py (-v | --version)
+  wal_steam.py (-f | --fonts) ["Ubuntu, Ubuntu Bold, Ubuntu Medium, Ubuntu Light"]
 
 Options:
   -h --help            show this help message and exit
@@ -60,6 +61,7 @@ Options:
   -u                   force update cache and config file
   -d                   apply HiDPI community patch
   -s "/steam/skins"    specify a custom steam skins folder to use
+  -f --fonts           specify custom fonts
 ```
 
 ## Screenshots

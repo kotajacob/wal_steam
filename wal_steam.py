@@ -19,7 +19,10 @@ import urllib.request                     # downloading the zip files
 import zipfile                            # extracting the zip files
 import sys
 import argparse                           # argument parsing
+import textwrap
+import re
 from distutils.dir_util import copy_tree  # copytree from shutil is broken so use copy_tree
+from argparse import RawTextHelpFormatter
 
 # set some variables for the file locations
 HOME_DIR          = os.getenv("HOME", os.getenv("USERPROFILE")) # should be crossplatform
@@ -49,11 +52,17 @@ METRO_PATCH_DIR  = os.path.join(CACHE_DIR, "metroPatchZip")
 METRO_PATCH_COPY = os.path.join(METRO_PATCH_DIR, "UPMetroSkin-e43f55b43f8ae565e162da664887051a1c76c5b4", "Unofficial 4.3.1 Patch", "Main Files [Install First]")
 METRO_PATCH_HDPI = os.path.join(METRO_PATCH_DIR, "UPMetroSkin-e43f55b43f8ae565e162da664887051a1c76c5b4", "Unofficial 4.3.1 Patch", "Extras", "High DPI", "Increased fonts", "Install")
 
+# CLI colour and style sequences
+CLI_RED    = "\033[91m"
+CLI_YELLOW = "\033[93m"
+CLI_BOLD   = "\033[1m"
+CLI_END    = "\033[0m"
+
 def tupToPrint(tup):
     tmp = ' '.join(map(str, tup)) # convert the tupple (rgb color) to a string ready to print
     return tmp
 
-def setColors(colors, variables, walColors, alpha, steam_dir):
+def setCustomStyles(colors, variables, walColors, alpha, steam_dir, fonts = []):
     print ("Patching new colors")
 
     # delete the old colors file if present in cache
@@ -76,6 +85,9 @@ def setColors(colors, variables, walColors, alpha, steam_dir):
     custom_styles = custom_styles.replace(
         "}\n\nstyles{", wal_styles + "}\n\nstyles{")
 
+    if fonts:
+        custom_styles = replaceFonts(custom_styles, fonts)
+
     f = open(COLORS_FILE, "w")
     f.write(custom_styles)
     f.close()
@@ -89,6 +101,23 @@ def setColors(colors, variables, walColors, alpha, steam_dir):
     print("If this is your first run you may have to ")
     print("enable Metro Wal Mod skin in steam then ")
     print("simply restart steam!")
+
+
+def replaceFonts(styles, fonts):
+    print("Patching custom fonts")
+
+    # attempt to replace font styles with regular expressions
+    matches = {
+        "^basefont=\"(.+?)\"": "basefont=\"" + fonts[0] + "\"",
+        "^semibold=\"(.+?)\"": "semibold=\"" + fonts[1] + "\"",
+        "^semilight=\"(.+?)\"": "semilight=\"" + fonts[2] + "\"",
+        "^light=\"(.+?)\"": "light=\"" + fonts[3] + "\"",
+    }
+
+    for pattern, replacement in matches.items():
+        styles = re.sub(pattern, replacement, styles, 0, re.M)
+
+    return styles
 
 ###################
 # color functions #
@@ -337,28 +366,44 @@ def getOs():
         print("Error: Steam install not found!")
         sys.exit(1)
 
+def parseFontArgs(rawArgs):
+    splitArgs = [arg.strip() for arg in rawArgs.split(",")]
+
+    if len(splitArgs) != 4:
+        print("Error: You must specify all four custom font styles.")
+        sys.exit(1)
+
+    return splitArgs
+
 def getArgs():
     # get the arguments with argparse
     description = "Wal Steam"
-    arg = argparse.ArgumentParser(description=description)
+    arg = argparse.ArgumentParser(description=description, formatter_class=RawTextHelpFormatter)
 
     arg.add_argument("-v", "--version", action="store_true",
-            help="Print wal_steam version.")
+        help="Print wal_steam version.")
 
     arg.add_argument("-w", action="store_true",
-            help="Get colors from wal.")
+        help="Get colors from wal.")
 
     arg.add_argument("-g", action="store_true",
-            help="Get colors from wpg.")
+        help="Get colors from wpg.")
 
     arg.add_argument("-s",
-            help="Enter a custom steam skin directory.")
+        help="Enter a custom steam skin directory.")
 
     arg.add_argument("-d", action="store_true",
-            help="Apply high dpi patches.")
+        help="Apply high dpi patches.")
 
     arg.add_argument("-u", action="store_true",
-            help="Force update cache, skin, and config file, WARNING WILL OVERWRITE config.json")
+        help=f"Force update cache, skin, and config file. {CLI_RED}WARNING:{CLI_END} WILL OVERWRITE config.json")
+
+    arg.add_argument("-f", "--fonts",
+        help=textwrap.dedent(f'''
+            Specify custom fonts. Enter font styles separated by comma.
+            {CLI_BOLD}Available styles:{CLI_END} basefont, semibold, semilight, light.
+            {CLI_YELLOW}Example:{CLI_END} 'Open Sans, Open Sans Semibold, Open Sans Semilight, Open Sans Light'
+            {CLI_RED}WARNING:{CLI_END} Fonts must already be installed on your system.'''))
 
     return arg.parse_args()
 
@@ -402,6 +447,13 @@ def main():
         # C:\Program Files (x86)\Steam\skins - used on windows
         oSys = getOs()
 
+    # allow the user to enter custom font styles
+    if arguments.fonts:
+        fonts = parseFontArgs(arguments.fonts)
+        print("Using custom font styles: " + arguments.fonts)
+    else:
+        fonts = ""
+
     # update the cache and config then exit
     if arguments.u:
         print("Force updating cache and config")
@@ -426,7 +478,7 @@ def main():
     alpha = getConfigAlpha()
 
     # finally create a temp colors.styles and copy it in updating the skin
-    setColors(colors, variables, walColors, alpha, oSys)
+    setCustomStyles(colors, variables, walColors, alpha, oSys, fonts)
 
 if __name__ == '__main__':
     main()
