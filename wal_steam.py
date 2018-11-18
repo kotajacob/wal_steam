@@ -39,7 +39,7 @@ STEAM_DIR_OSX     = os.path.expanduser("~/Library/Application Support/Steam/Stea
 STEAM_DIR_UBUNTU  = os.path.expanduser("~/.steam/skins")
 STEAM_DIR_WINDOWS = "C:\Program Files (x86)\Steam\skins"
 WAL_COLORS        = os.path.join(HOME_DIR, ".cache", "wal", "colors.css")
-WPG_COLORS        = os.path.join(HOME_DIR, ".config", "wpg", "current.css")
+WPG_COLORS        = os.path.join(HOME_DIR, ".config", "wpg", "formats", "colors.css")
 
 METRO_URL                 = "http://metroforsteam.com/downloads/4.3.1.zip"
 METRO_ZIP                 = os.path.join(CACHE_DIR, "metroZip.zip")
