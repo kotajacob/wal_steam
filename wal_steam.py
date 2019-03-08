@@ -414,8 +414,7 @@ def getArgs():
             {CLI_YELLOW}Example:{CLI_END} 'Open Sans, Open Sans Semibold, Open Sans Semilight, Open Sans Light'
             {CLI_RED}WARNING:{CLI_END} Fonts must already be installed on your system.'''))
     
-    arg.add_argument("-a", "--attempts",
-            help="Set the number of patch download attempts (DEFAULT=5)")
+    arg.add_argument("-a", "--attempts", help="Set the number of patch download attempts (DEFAULT=5)")
 
     return arg.parse_args()
 
@@ -475,9 +474,9 @@ def main():
         print("Run with -w or -g to apply and re-enable wal_steam")
         sys.exit()
 
-    if arguments.a:
+    if arguments.attempts:
         try:
-            attempts_bound = int(arguments.a)
+            attempts_bound = int(arguments.attempts)
             MAX_PATCH_DL_ATTEMPTS = attempts_bound
         except:
             print("Error setting maximum patch download attempts, using default (5).")
