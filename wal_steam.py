@@ -250,7 +250,6 @@ def makeSkin():
     while (patch_dl_attempts < MAX_PATCH_DL_ATTEMPTS) and not patch_dld:
         try:
             opener = urllib.request.build_opener()
-            opener.addheaders = [{'User-Agent', 'Mozilla/5.0'}]
             urllib.request.install_opener(opener)
             urllib.request.urlretrieve(METRO_PATCH_URL, METRO_PATCH_ZIP)
             patch_dld = True
