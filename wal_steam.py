@@ -51,6 +51,7 @@ METRO_PATCH_ZIP  = os.path.join(CACHE_DIR, "metroPatchZip.zip")
 METRO_PATCH_DIR  = os.path.join(CACHE_DIR, "metroPatchZip")
 METRO_PATCH_COPY = os.path.join(METRO_PATCH_DIR, "UPMetroSkin-e43f55b43f8ae565e162da664887051a1c76c5b4", "Unofficial 4.3.1 Patch", "Main Files [Install First]")
 METRO_PATCH_HDPI = os.path.join(METRO_PATCH_DIR, "UPMetroSkin-e43f55b43f8ae565e162da664887051a1c76c5b4", "Unofficial 4.3.1 Patch", "Extras", "High DPI", "Increased fonts", "Install")
+MAX_PATCH_DL_ATTEMPTS = 5
 
 # CLI colour and style sequences
 CLI_RED    = "\033[91m"
@@ -242,14 +243,22 @@ def makeSkin():
     z.close()
 
     # download metro for steam patch and extract
-    print("Downloading Metro patch")
-    try:
-        opener = urllib.request.build_opener()
-        opener.addheaders = [{'User-Agent', 'Mozilla/5.0'}]
-        urllib.request.install_opener(opener)
-        urllib.request.urlretrieve(METRO_PATCH_URL, METRO_PATCH_ZIP)
-    except:
-        print("Error: downloading needed patch file. Check your connection and try again.")
+    print("Attempting to download Metro patch")
+    patch_dl_attempts = 0
+    patch_dld = False
+    while (patch_dl_attempts <= MAX_PATCH_DL_ATTEMPTS) and not patch_dld:
+        try:
+            opener = urllib.request.build_opener()
+            opener.addheaders = [{'User-Agent', 'Mozilla/5.0'}]
+            urllib.request.install_opener(opener)
+            urllib.request.urlretrieve(METRO_PATCH_URL, METRO_PATCH_ZIP)
+            patch_dld = True
+        except:
+            patch_dl_attempts += 1
+            print("Error: download attempt" + str(patch_dl_attempts) + " failed.")
+
+    if not patch_dld:
+        print("Error: patch download attempts failed, exiting...")
         sys.exit(1)
 
     z = zipfile.ZipFile(METRO_PATCH_ZIP, 'r')
