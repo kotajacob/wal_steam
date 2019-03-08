@@ -20,6 +20,7 @@ import zipfile                            # extracting the zip files
 import sys
 import argparse                           # argument parsing
 import textwrap
+import time
 import re
 from distutils.dir_util import copy_tree  # copytree from shutil is broken so use copy_tree
 from argparse import RawTextHelpFormatter
@@ -246,7 +247,7 @@ def makeSkin():
     print("Attempting to download Metro patch")
     patch_dl_attempts = 0
     patch_dld = False
-    while (patch_dl_attempts <= MAX_PATCH_DL_ATTEMPTS) and not patch_dld:
+    while (patch_dl_attempts < MAX_PATCH_DL_ATTEMPTS) and not patch_dld:
         try:
             opener = urllib.request.build_opener()
             opener.addheaders = [{'User-Agent', 'Mozilla/5.0'}]
@@ -255,11 +256,15 @@ def makeSkin():
             patch_dld = True
         except:
             patch_dl_attempts += 1
-            print("Error: download attempt" + str(patch_dl_attempts) + " failed.")
+            print("Error: download attempt " + str(patch_dl_attempts) + " failed.")
+            if patch_dl_attempts < MAX_PATCH_DL_ATTEMPTS:
+                time.sleep(5)
 
     if not patch_dld:
         print("Error: patch download attempts failed, exiting...")
         sys.exit(1)
+    else:
+        print("Patch downloaded, proceeding...")
 
     z = zipfile.ZipFile(METRO_PATCH_ZIP, 'r')
     z.extractall(METRO_PATCH_DIR)
