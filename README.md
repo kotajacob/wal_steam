@@ -62,6 +62,7 @@ Options:
   -d                   apply HiDPI community patch
   -s "/steam/skins"    specify a custom steam skins folder to use
   -f --fonts           specify custom fonts
+  -a --attempts        specify the max number of patch download attempts (DEFAULT=5)
 ```
 
 ## Screenshots

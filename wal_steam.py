@@ -413,6 +413,9 @@ def getArgs():
             {CLI_BOLD}Available styles:{CLI_END} basefont, semibold, semilight, light.
             {CLI_YELLOW}Example:{CLI_END} 'Open Sans, Open Sans Semibold, Open Sans Semilight, Open Sans Light'
             {CLI_RED}WARNING:{CLI_END} Fonts must already be installed on your system.'''))
+    
+    arg.add_argument("-a", "--attempts",
+            help="Set the number of patch download attempts (DEFAULT=5)")
 
     return arg.parse_args()
 
@@ -471,6 +474,13 @@ def main():
         print("Cache and config updated")
         print("Run with -w or -g to apply and re-enable wal_steam")
         sys.exit()
+
+    if arguments.a:
+        try:
+            attempts_bound = int(arguments.a)
+            MAX_PATCH_DL_ATTEMPTS = attempts_bound
+        except:
+            print("Error setting maximum patch download attempts, using default (5).")
 
     # check for the cache, the skin, and get them if needed
     checkInstall(oSys, dpi)
