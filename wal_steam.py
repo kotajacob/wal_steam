@@ -73,15 +73,15 @@ def setCustomStyles(colors, variables, walColors, alpha, steam_dir, fonts = []):
     except FileNotFoundError:
         print("No file to remove")
 
-    f = open(METRO_COLORS_FILE, 'r')
-    custom_styles = f.read()
-    f.close()
+    with open(METRO_COLORS_FILE) as f:
+        custom_styles = f.read()
 
     patches = []
     ii = 0
-    for i in variables:
-        patches.append(i + '="' + tupToPrint(colors[int(walColors[ii])]) + ' ' + str(alpha[ii]) + '"')
-        ii = ii + 1
+    for ii, i in enumerate(variables):
+        patches.append(
+            '{}="{} {}"'.format(i, tupToPrint(colors[int(walColors[ii])]), alpha[ii])
+        )
 
     wal_styles = "\n".join(patches)
     custom_styles = custom_styles.replace(
@@ -90,19 +90,20 @@ def setCustomStyles(colors, variables, walColors, alpha, steam_dir, fonts = []):
     if fonts:
         custom_styles = replaceFonts(custom_styles, fonts)
 
-    f = open(COLORS_FILE, "w")
-    f.write(custom_styles)
-    f.close()
+    with open(COLORS_FILE, "w") as f:
+        f.write(custom_styles)
 
     # now copy it to the proper place based on the os
     shutil.copy(COLORS_FILE, os.path.join(steam_dir, SKIN_NAME))
 
     # cleanup by removing generated color files
     os.remove(COLORS_FILE)
-    print("Wal colors are now patched and ready to go")
-    print("If this is your first run you may have to ")
-    print("enable Metro Wal Mod skin in steam then ")
-    print("simply restart steam!")
+    print(
+        "Wal colors are now patched and ready to go\n"
+        "If this is your first run you may have to\n"
+        "enable Metro Wal Mod skin in steam then\n"
+        "simply restart steam!"
+    )
 
 
 def replaceFonts(styles, fonts):
@@ -126,40 +127,35 @@ def replaceFonts(styles, fonts):
 ###################
 def getConfigAlpha():
     # read the config file and return a dictionary of the variables and color variables
-    f = open(os.path.join(CONFIG_DIR, CONFIG_FILE), 'r')
-
-    # save the lines of the config file to rawFile
-    rawFile = f.readlines()
+    with open(os.path.join(CONFIG_DIR, CONFIG_FILE)) as f:
+        # save the lines of the config file to rawFile
+        rawFile = f.readlines()
 
     # loop through rawFile
     result = []
     for line in rawFile:
         tmpResult = line[line.find(",")+1:line.find("\n")]
         result.append(tmpResult)
-    f.close()
     return result
 
 def getConfigColor():
     # read the config file and return a dictionary of the variables and color variables
-    f = open(os.path.join(CONFIG_DIR, CONFIG_FILE), 'r')
-
-    # save the lines of the config file to rawFile
-    rawFile = f.readlines()
+    with open(os.path.join(CONFIG_DIR, CONFIG_FILE)) as f:
+        # save the lines of the config file to rawFile
+        rawFile = f.readlines()
 
     # loop through rawFile
     result = []
     for line in rawFile:
         tmpResult = line[line.find("=")+1:line.find(",")]
         result.append(tmpResult)
-    f.close()
     return result
 
 def getConfigVar():
     # read the config file and return a dictionary of the variables and color variables
-    f = open(os.path.join(CONFIG_DIR, CONFIG_FILE), 'r')
-
-    # save the lines of the config file to rawFile
-    rawFile = f.readlines()
+    with open(os.path.join(CONFIG_DIR, CONFIG_FILE)) as f:
+        # save the lines of the config file to rawFile
+        rawFile = f.readlines()
 
     # loop through rawFile
     result = []
@@ -183,12 +179,12 @@ def getColors(mode):
     # parse the file
     print("Reading colors")
     try:
-        f = open(colorsFile, 'r')
+        with open(colorsFile) as f:
+            raw_file = f.readlines()  # save the lines to rawFile
     except:
         print("Error: Colors file missing. Make sure you've run pywal/wpg before wal_steam")
         sys.exit(1)
 
-    rawFile = f.readlines() # save the lines to rawFile
     # delete the lines not involving the colors
     del rawFile[0:11]
     del rawFile[16]
@@ -203,7 +199,6 @@ def getColors(mode):
         # append the hex code to the colors list
         colors.append(tmp)
 
-    f.close()
     return colors
 
 ##########################
@@ -239,9 +234,8 @@ def makeSkin():
         print("Error: downloading needed skin file. Check your connection and try again.")
         sys.exit(1)
 
-    z = zipfile.ZipFile(METRO_ZIP, 'r')
-    z.extractall(METRO_DIR)
-    z.close()
+    with zipfile.ZipFile(METRO_ZIP, 'r') as z:
+        z.extractall(METRO_DIR)
 
     # download metro for steam patch and extract
     print("Attempting to download Metro patch")
@@ -265,9 +259,8 @@ def makeSkin():
     else:
         print("Patch downloaded, proceeding...")
 
-    z = zipfile.ZipFile(METRO_PATCH_ZIP, 'r')
-    z.extractall(METRO_PATCH_DIR)
-    z.close()
+    with zipfile.ZipFile(METRO_PATCH_ZIP, 'r') as z:
+        z.extractall(METRO_PATCH_DIR)
 
     # finally apply the patch
     copy_tree(METRO_PATCH_COPY, METRO_DIR) # use copy_tree not copytree, shutil copytree is broken
@@ -454,7 +447,7 @@ def main():
     # allow the user to enter a custom steam install location
     if arguments.s:
         oSys = arguments.s
-        print("Using custom skin path: " + arguments.s)
+        print("Using custom skin path: {}".format(arguments.s))
     else:
         # check where the os installed steam
         # ~/.steam/steam/skins               - common linux install location
@@ -465,7 +458,7 @@ def main():
     # allow the user to enter custom font styles
     if arguments.fonts:
         fonts = parseFontArgs(arguments.fonts)
-        print("Using custom font styles: " + arguments.fonts)
+        print("Using custom font styles: {}".format(arguments.fonts))
     else:
         fonts = ""
 
