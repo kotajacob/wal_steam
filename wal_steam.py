@@ -180,7 +180,7 @@ def getColors(mode):
     print("Reading colors")
     try:
         with open(colorsFile) as f:
-            raw_file = f.readlines()  # save the lines to rawFile
+            rawFile = f.readlines()  # save the lines to rawFile
     except:
         print("Error: Colors file missing. Make sure you've run pywal/wpg before wal_steam")
         sys.exit(1)
