@@ -23,7 +23,7 @@ interesting features).
 
 **Python PIP:** `sudo pip3 install wal-steam`
 
-**Arch Linux AUR:** `pacaur -S python-wal-steam-git`
+**Arch Linux AUR:** `yay -S python-wal-steam-git`
 
 ### Manual
 
@@ -43,7 +43,7 @@ If you cloned the repo all you need to do is run the script with python 3 from w
 
 Example:
 
-`wal-steam -w`
+`wal_steam -w`
 
 ```
 Usage:
