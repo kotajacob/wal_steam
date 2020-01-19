@@ -29,8 +29,9 @@ from argparse import RawTextHelpFormatter
 HOME_DIR          = os.getenv("HOME", os.getenv("USERPROFILE")) # should be crossplatform
 CACHE_DIR         = os.path.join(HOME_DIR, ".cache", "wal_steam")
 CONFIG_DIR        = os.path.join(HOME_DIR, ".config", "wal_steam")
-SKIN_NAME         = "Metro 4.3.1 Wal_Mod"
-VERSION           = "1.3.3"
+SKIN_VERSION      = "4.4"
+SKIN_NAME         = "Metro %s Wal_Mod" % SKIN_VERSION
+VERSION           = "1.4"
 CONFIG_FILE       = "wal_steam.conf"
 COLORS_FILE       = os.path.join(CACHE_DIR, "custom.styles")
 CONFIG_URL        = "https://raw.githubusercontent.com/kotajacob/wal_steam_config/master/wal_steam.conf"
@@ -42,16 +43,16 @@ STEAM_DIR_WINDOWS = "C:\Program Files (x86)\Steam\skins"
 WAL_COLORS        = os.path.join(HOME_DIR, ".cache", "wal", "colors.css")
 WPG_COLORS        = os.path.join(HOME_DIR, ".config", "wpg", "formats", "colors.css")
 
-METRO_URL                 = "http://metroforsteam.com/downloads/4.3.1.zip"
+METRO_URL                 = "https://github.com/minischetti/metro-for-steam/archive/v%s.zip" % SKIN_VERSION
 METRO_ZIP                 = os.path.join(CACHE_DIR, "metroZip.zip")
-METRO_DIR                 = os.path.join(CACHE_DIR, "metroZip")
+METRO_DIR                 = os.path.join(CACHE_DIR, "metro-for-steam-%s" % SKIN_VERSION)
 METRO_COLORS_FILE         = os.path.join(METRO_DIR, "custom.styles")
 
-METRO_PATCH_URL  = "https://github.com/redsigma/UPMetroSkin/archive/e43f55b43f8ae565e162da664887051a1c76c5b4.zip" # A link to the version we've tested rather than the latest, just in case they break things upstream.
+METRO_PATCH_URL  = "https://github.com/redsigma/UPMetroSkin/archive/9.1.12.zip" # A link to the version we've tested rather than the latest, just in case they break things upstream.
 METRO_PATCH_ZIP  = os.path.join(CACHE_DIR, "metroPatchZip.zip")
 METRO_PATCH_DIR  = os.path.join(CACHE_DIR, "metroPatchZip")
-METRO_PATCH_COPY = os.path.join(METRO_PATCH_DIR, "UPMetroSkin-e43f55b43f8ae565e162da664887051a1c76c5b4", "Unofficial 4.3.1 Patch", "Main Files [Install First]")
-METRO_PATCH_HDPI = os.path.join(METRO_PATCH_DIR, "UPMetroSkin-e43f55b43f8ae565e162da664887051a1c76c5b4", "Unofficial 4.3.1 Patch", "Extras", "High DPI", "Increased fonts", "Install")
+METRO_PATCH_COPY = os.path.join(METRO_PATCH_DIR, "UPMetroSkin-9.1.12", "Unofficial 4.x Patch", "Main Files [Install First]")
+METRO_PATCH_HDPI = os.path.join(METRO_PATCH_DIR, "UPMetroSkin-9.1.12", "Unofficial 4.x Patch", "Extras", "High DPI", "Increased fonts", "Install")
 MAX_PATCH_DL_ATTEMPTS = 5
 
 # CLI colour and style sequences
@@ -235,7 +236,7 @@ def makeSkin():
         sys.exit(1)
 
     with zipfile.ZipFile(METRO_ZIP, 'r') as z:
-        z.extractall(METRO_DIR)
+        z.extractall(CACHE_DIR)
 
     # download metro for steam patch and extract
     print("Attempting to download Metro patch")
@@ -410,7 +411,7 @@ def getArgs():
             {CLI_BOLD}Available styles:{CLI_END} basefont, semibold, semilight, light.
             {CLI_YELLOW}Example:{CLI_END} 'Open Sans, Open Sans Semibold, Open Sans Semilight, Open Sans Light'
             {CLI_RED}WARNING:{CLI_END} Fonts must already be installed on your system.'''))
-    
+
     arg.add_argument("-a", "--attempts", help="Set the number of patch download attempts (DEFAULT=5)")
 
     return arg.parse_args()
