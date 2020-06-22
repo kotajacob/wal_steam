@@ -424,6 +424,10 @@ def main():
 
     # parse the arguments
     arguments, unknown = getArgs()
+    
+    if len(unknown) != 0:
+        print("Unknown arguments: {}".format(' '.join(unknown)))
+    
     if arguments.version:
         print("Wal Steam", VERSION)
         sys.exit()
