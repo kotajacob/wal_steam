@@ -2,11 +2,19 @@
 
 A little program that themes the colors for Metro for steam from `wal`or `wpg`. Now with HiDPI support!
 
-![1](https://ptpb.pw/l9Rw.png)
+![1](https://paste.cf/8653142dd2aac9b734b1cacf85d141315a8d59f2.png)
 
 ## About
 
 `wal_steam` is a tiny program that is meant to work with either `wal` or `wpgtk`, by reading the colors they generate and making a color theme for a slightly tweaked version of Metro for Steam.
+
+**Disclaimer:** Steam isn't nearly as "theme-able" as it once was. Over the
+years many of the UI elements that we used to be able to change with themes with
+be re-written with hard-coding to use steam's default blue theme. As a result
+`wal_steam` has gotten noticably worse since I originally wrote it. I'll accept
+pull requests when I have time to test them, but this project is very low
+priority to me since I barely use Steam anymore. I suggest getting your games on
+itch, gog, or humble.
 
 [Wal](https://github.com/dylanaraps/pywal) is a little program for linux that creates a terminal color scheme based on your wallpaper (in addition to being able to set the wallpaper and a few other
 interesting features).
@@ -64,11 +72,3 @@ Options:
   -f --fonts           specify custom fonts
   -a --attempts        specify the max number of patch download attempts (DEFAULT=5)
 ```
-
-## Screenshots
-
-![2](https://ptpb.pw/kw6D.png)
-
-![3](https://ptpb.pw/zhFg.png)
-
-![4](https://ptpb.pw/xOo1.png)
