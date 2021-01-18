@@ -405,7 +405,7 @@ def getArgs():
     arg.add_argument("-u", action="store_true",
         help=f"Force update cache, skin, and config file. {CLI_RED}WARNING:{CLI_END} WILL OVERWRITE config.json")
 
-    arg.add_argument("-f", "--fonts",
+    arg.add_argument("-f", "--fonts", nargs='+',
         help=textwrap.dedent(f'''
             Specify custom fonts. Enter font styles separated by comma.
             {CLI_BOLD}Available styles:{CLI_END} basefont, semibold, semilight, light.
@@ -414,7 +414,7 @@ def getArgs():
 
     arg.add_argument("-a", "--attempts", help="Set the number of patch download attempts (DEFAULT=5)")
 
-    return arg.parse_args()
+    return arg.parse_known_args()
 
 def main():
     # set default mode to wal
@@ -423,7 +423,11 @@ def main():
     mode = 0
 
     # parse the arguments
-    arguments = getArgs()
+    arguments, unknown = getArgs()
+    
+    if len(unknown) != 0:
+        print("Unknown arguments: {}".format(' '.join(unknown)))
+    
     if arguments.version:
         print("Wal Steam", VERSION)
         sys.exit()
@@ -458,8 +462,8 @@ def main():
 
     # allow the user to enter custom font styles
     if arguments.fonts:
-        fonts = parseFontArgs(arguments.fonts)
-        print("Using custom font styles: {}".format(arguments.fonts))
+        fonts = parseFontArgs(' '.join(arguments.fonts))
+        print("Using custom font styles: {}".format(', '.join(fonts)))
     else:
         fonts = ""
 
