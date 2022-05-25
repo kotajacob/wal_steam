@@ -39,6 +39,7 @@ CONFIG_URL        = "https://raw.githubusercontent.com/kotajacob/wal_steam_confi
 STEAM_DIR_OTHER   = os.path.expanduser("~/.steam/steam/skins")
 STEAM_DIR_OSX     = os.path.expanduser("~/Library/Application Support/Steam/Steam.AppBundle/Steam/Contents/MacOS/skins")
 STEAM_DIR_UBUNTU  = os.path.expanduser("~/.steam/skins")
+STEAM_DIR_ARCH    = os.path.expanduser("~/.local/share/Steam")
 STEAM_DIR_WINDOWS = "C:\Program Files (x86)\Steam\skins"
 WAL_COLORS        = os.path.join(HOME_DIR, ".cache", "wal", "colors.css")
 WPG_COLORS        = os.path.join(HOME_DIR, ".config", "wpg", "formats", "colors.css")
@@ -363,6 +364,9 @@ def getOs():
     # check if ~/.steam/skins exists
     elif os.path.isdir(STEAM_DIR_UBUNTU):
         return STEAM_DIR_UBUNTU
+    # check if ~/.local/share/Steam 
+    elif os.path.isdir(STEAM_DIR_ARCH):
+        return STEAM_DIR_ARCH
     # check if C:\Program Files (x86)\Steam\skins exists
     elif os.path.isdir(STEAM_DIR_WINDOWS):
         return STEAM_DIR_WINDOWS
